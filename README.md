@@ -10,7 +10,10 @@ the box.
 Installation
 ------------
 
-Install: `npm -g install closurecompiler` (~50mb, so installing globally is recommended)
+Install: `npm -g install closurecompiler`
+
+Installing globally is recommended if no global JRE is available and the bundled JRE needs to be downloaded, which is
+about 45mb large.
 
 ClosureCompiler API
 -------------------
