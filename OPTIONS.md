@@ -1,8 +1,8 @@
-ClosureCompiler.js: cc Command Line Utility Options
-===================================================
+ClosureCompiler.js: ccjs Command Line Utility Options
+=====================================================
 
 ```
-  Usage:   cc sourceFiles ... [--option=value --flagOption ...] [> outFile]
+  Usage:   ccjs sourceFiles ... [--option=value --flagOption ...] [> outFile]
 
  --accept_const_keyword                 : Allows usage of const keyword.
  --angular_pass                         : Generate $inject properties for

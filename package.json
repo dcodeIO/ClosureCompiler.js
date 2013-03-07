@@ -8,7 +8,7 @@
     ],
     "main": "ClosureCompiler.js",
     "bin": {
-        "cc": "./bin/cc"
+        "ccjs": "./bin/ccjs"
     },
     "repository": {
         "type": "git",

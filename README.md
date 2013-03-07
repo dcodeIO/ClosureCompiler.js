@@ -52,14 +52,14 @@ Command line utility
 --------------------
 
 ```bash
-Usage:   cc [sourceFiles ...] [--option=value --flagOption ...] [> outFile]
+Usage:   ccjs [sourceFiles ...] [--option=value --flagOption ...] [> outFile]
 ```
 
 #### Available options ####
 
-Actually `cc` supports all the command line options of Closure Compiler, except `--js` and `--js_output_file`.
+Actually `ccjs` supports all the command line options of Closure Compiler, except `--js` and `--js_output_file`.
 
-* [See the output of cc --help](https://github.com/dcodeIO/ClosureCompiler.js/blob/master/OPTIONS.md).
+* [See the output of ccjs --help](https://github.com/dcodeIO/ClosureCompiler.js/blob/master/OPTIONS.md).
 
 License (ClosureCompiler.js and Closure Compiler itself)
 --------------------------------------------------------
