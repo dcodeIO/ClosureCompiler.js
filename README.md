@@ -1,8 +1,8 @@
 ClosureCompiler.js - Closure Compiler for node.js [![Build Status](https://travis-ci.org/dcodeIO/ClosureCompiler.js.png?branch=master)](https://travis-ci.org/dcodeIO/ClosureCompiler.js)
 =================================================
 
-The all-round carefree package. Includes [Closure Compiler](https://developers.google.com/closure/compiler/) and 
-downloads a JRE built from [OpenJDK](http://openjdk.java.net) if required. No environment variables to set, works out of
+The all-round carefree package. Automatically downloads and sets up [Closure Compiler](https://developers.google.com/closure/compiler/)
+and a JRE built from [OpenJDK](http://openjdk.java.net) if required. No environment variables to set, works out of
 the box.
 
 *-- „Stop uglifying, be a man!“*
