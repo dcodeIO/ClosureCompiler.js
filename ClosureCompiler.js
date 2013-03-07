@@ -67,7 +67,20 @@
     };
 
     /**
-     * Compiles a script through Closure Compiler.
+     * Compiles one or more scripts through a new instance of Closure Compiler.
+     * @param {string|Array.<string>} files File or an array of files to compile
+     * @param {Object.<string,*|Array>} options Any options Closure Compiler supports. If an option can occur
+     *  multiple times, simply supply an array. Externs can additionally point to a directory to include all *.js files
+     *  in it.
+     * @param {function(Error,string)} callback Callback called with the error, if any, and the compiled code
+     * @throws {Error} If the file cannot be compiled
+     */
+    ClosureCompiler.compile = function(files, options, callback) {
+        new ClosureCompiler().compile(files, options, callback);
+    };
+
+    /**
+     * Compiles one or more scripts through this instance of Closure Compiler.
      * @param {string|Array.<string>} files File or an array of files to compile
      * @param {Object.<string,*|Array>} options Any options Closure Compiler supports. If an option can occur
      *  multiple times, simply supply an array. Externs can additionally point to a directory to include all *.js files 

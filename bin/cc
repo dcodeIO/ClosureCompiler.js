@@ -77,8 +77,7 @@ for (var i=2; i<process.argv.length; i++) {
 }
 
 // Run it
-var cc = new ClosureCompiler();
-cc.compile(files, options, function(error, result) {
+ClosureCompiler.compile(files, options, function(error, result) {
     if (help) {
         help = error.message;
         help = help.replace(/(\-\-[a-zA-Z0-9_]+) ([^ ])/g, function($, $1, $2) {

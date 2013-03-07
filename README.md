@@ -22,15 +22,22 @@ The API is quite simple and fully explained in a few lines of code:
 ```javascript
 var ClosureCompiler = require("closurecompiler");
 
-var cc = new ClosureCompiler();
-cc.compile(
+ClosureCompiler.compile(
     ['file1.js', 'file2.js',
     {
-        compilation_level: "ADVANCED_OPTIMIZATIONS",          // Options in the API exclude the trailing "--"
-        formatting: "PRETTY_PRINT",
-        externs: ["externs/file3.js", "externs/contrib/"],    // Specify a directory to include everything inside,
-        ...                                                   // As you see, multiple options with the same name are
-    },                                                        // specified using an array.
+        // Options in the API exclude the "--" prefix
+        compilation_level: "ADVANCED_OPTIMIZATIONS",
+        
+        // Capitalization does not matter 
+        Formatting: "PRETTY_PRINT",
+        
+        // If you specify a directory here, all files inside are used
+        externs: ["externs/file3.js", "externs/contrib/"],
+        
+        // ^ As you've seen, multiple options with the same name are
+        //   specified using an array.
+        ...
+    },
     function(error, result) {
         if (error) {
             // Display error...
