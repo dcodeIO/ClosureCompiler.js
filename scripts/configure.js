@@ -119,7 +119,7 @@ function configure_jre() {
  */
 function download(downloadUrl, filename, callback, ondata) {
     var url = require("url").parse(downloadUrl);
-    var out = require("fs").createWriteStream(filename, { flags: 'w', encoding: null, mode: 0666 });
+    var out = require("fs").createWriteStream(filename, { flags: 'w', encoding: "ascii", mode: 0666 });
     var bytes = 0, total = -1;
     var req = require("http").request({
         "hostname": url["host"],
@@ -131,7 +131,7 @@ function download(downloadUrl, filename, callback, ondata) {
             total = parseInt(res.headers["content-length"], 10);
         }
         if (res.statusCode != 200) {
-            res.setEncoding(null);
+            res.setEncoding("ascii");
             callback(new Error("Download failed: HTTP status code "+res.statusCode), -1);
             return;
         }
