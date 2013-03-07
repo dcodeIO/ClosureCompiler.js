@@ -20,9 +20,10 @@
  * see: https://github.com/dcodeIO/ClosureCompiler.js for details
  */
 
-var java = process.env["JAVA_HOME"] ? process.env["JAVA_HOME"]+"/bin/java" : "java";
+var fs = require("fs"),
+    java = process.env["JAVA_HOME"] ? process.env["JAVA_HOME"]+"/bin/java" : "java";
 
-if (!require("fs").existsSync(java)) {
+if (!fs.existsSync(java)) {
     java = "java";
 }
 
