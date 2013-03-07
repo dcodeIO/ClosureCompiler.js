@@ -48,6 +48,8 @@ download(ccUrl, ccTempFile, function(error, bytes) {
         fail();
     }
     console.log("  ✔ Download complete: "+ccTempFile+" ("+parseInt(bytes/mb, 10)+" mb)");
+    require("sleep").sleep(1);
+    console.log("    Unpacking "+ccTempFile+" ...");
     unpack(ccTempFile, function(error) {
         if (error) {
             console.log("  ✖ Unpack failed: "+error+"\n");
@@ -86,6 +88,7 @@ function configure_jre() {
                     fail();
                 }
                 console.log("    ✔ Download complete: "+jreTempFile+" ("+parseInt(bytes/mb, 10)+" mb)");
+                require("sleep").sleep(1);
                 console.log("      Unpacking "+jreTempFile+" ...");
                 unpack(jreTempFile, function(error) {
                     if (error) {
