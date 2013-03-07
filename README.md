@@ -2,14 +2,14 @@ ClosureCompiler.js - Closure Compiler for node.js [![Build Status](https://travi
 =================================================
 
 The all-round carefree package. Includes [Closure Compiler](https://developers.google.com/closure/compiler/) and a JRE
-built from [OpenJDK](http://openjdk.java.net). No dependencies, no environment variables to set, works out of the box.
+built from [OpenJDK](http://openjdk.java.net). Zero dependencies, no environment variables to set, works out of the box.
 
--- „Stop uglifying, be a man!“
+*-- „Stop uglifying, be a man!“*
 
 Installation
 ------------
 
-Install: `npm -g install closurecompiler` (50mb)
+Install: `npm -g install closurecompiler` (~50mb, so installing globally is recommended)
 
 ClosureCompiler API
 -------------------
@@ -53,9 +53,17 @@ Usage:   ccjs [sourceFiles ...] [--option=value --flagOption ...] [> outFile]
 
 #### Available options ####
 
-Actually `ccjs` supports all the command line options of Closure Compiler, except `--js` and `--js_output_file`.
+The API and `ccjs` support all the command line options of Closure Compiler except `--js` and `--js_output_file`.
 
 * [See the output of ccjs --help](https://github.com/dcodeIO/ClosureCompiler.js/blob/master/OPTIONS.md).
+
+Externs for `ADVANCED_OPTIMIZATIONS`
+------------------------------------
+* [Closure Compiler official](http://code.google.com/p/closure-compiler/source/browse/#git%2Fexterns)
+* [Closure Compiler contrib](http://code.google.com/p/closure-compiler/source/browse/contrib/externs)
+* [node.js Closure Compiler externs](https://github.com/dcodeIO/node.js-closure-compiler-externs)
+
+*-- „Be a hero!“*
 
 License (ClosureCompiler.js and Closure Compiler itself)
 --------------------------------------------------------
@@ -65,4 +73,4 @@ License (JRE)
 -------------
 Binary License for OpenJDK - http://openjdk.java.net/legal/binary-license-2007-05-08.html
 
-This repository is not officially supported by Google or Oracle. All rights belong to their respective owners.
+This package is not officially supported by Google or Oracle. All rights belong to their respective owners.
