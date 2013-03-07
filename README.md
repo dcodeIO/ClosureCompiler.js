@@ -50,8 +50,9 @@ Usage:   cc [sourceFiles ...] [--option=value --flagOption ...] [> outFile]
 
 #### Available options ####
 
-Actually `cc` supports all the command line options of Closure Compiler, except `--js` and `--js_output_file`. See the
-output of [cc --help](https://github.com/dcodeIO/ClosureCompiler.js/blob/master/OPTIONS.md).
+Actually `cc` supports all the command line options of Closure Compiler, except `--js` and `--js_output_file`.
+
+* [See the output of cc --help](https://github.com/dcodeIO/ClosureCompiler.js/blob/master/OPTIONS.md).
 
 License (ClosureCompiler.js and Closure Compiler itself)
 --------------------------------------------------------

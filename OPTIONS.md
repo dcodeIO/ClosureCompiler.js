@@ -66,10 +66,6 @@ ClosureCompiler.js: cc Command Line Utility Options
  --generate_exports                     : Generates export code for those
                                           marked with @export
  --help                                 : Displays this message
- --js=VAL                               : The JavaScript filename. You may
-                                          specify multiple
- --js_output_file=VAL                   : Primary output filename. If not
-                                          specified, output is written to stdout
  --jscomp_error=VAL                     : Make the named class of warnings an
                                           error. Options:accessControls,
                                           ambiguousFunctionDecl, checkRegExp,
