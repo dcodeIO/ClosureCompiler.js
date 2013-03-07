@@ -20,39 +20,53 @@
  * see: https://github.com/dcodeIO/ClosureCompiler.js for details
  */
 
-var fs = require("fs"),
+var ClosureCompiler = require(__dirname+"/../ClosureCompiler.js"),
+    fs = require("fs"),
     path = require("path"),
 	child_process = require("child_process");
 
-console.log("Configuring ClosureCompiler.js for platform '"+process.platform+"' ...\n");
-var jre = path.normalize(__dirname+path.sep+".."+path.sep+"jre");
-console.log("  0755 "+jre);
-fs.chmodSync(jre, 0755);
-var dirname, ext = "";
-if ((/^win/i).test(process.platform)) {
-    dirname = "bin_windows";
-    ext = ".exe";
-} else if ((/^darwin/i).test(process.platform)) {
-    dirname = "bin_mac";
-} else {
-    dirname = "bin_linux";
-}
-var from = path.normalize(__dirname+path.sep+".."+path.sep+"jre"+path.sep+dirname);
+// Basically: Rename the platform's bin_* directory to bin and set necessary file permissions
 var to = path.normalize(__dirname+path.sep+".."+path.sep+"jre"+path.sep+"bin");
-var java = to+path.sep+"java"+ext;
+var java = to+path.sep+"java"+ClosureCompiler.JAVA_EXT;
 
-console.log("  '"+from+"' -> '"+to+"'");
-fs.renameSync(from, to);
-console.log("  0755 "+java);
-fs.chmodSync(java, 0755);
+if (fs.existsSync(__dirname+"/../jre/bin")) {
+    console.log("ClosureCompiler.js's bundled JRE is already configured\n");
+} else {
+    console.log("Configuring ClosureCompiler.js's bundled JRE for platform '"+process.platform+"' ...\n");
+    var jre = path.normalize(__dirname+path.sep+".."+path.sep+"jre");
+    console.log("  0755 "+jre);
+    fs.chmodSync(jre, 0755);
+    var dirname, ext = "";
+    if ((/^win/i).test(process.platform)) {
+        dirname = "bin_windows";
+        ext = ".exe";
+    } else if ((/^darwin/i).test(process.platform)) {
+        dirname = "bin_mac";
+    } else {
+        dirname = "bin_linux";
+    }
+    var from = path.normalize(__dirname+path.sep+".."+path.sep+"jre"+path.sep+dirname);
+    console.log("  '"+from+"' -> '"+to+"'");
+    fs.renameSync(from, to);
+    console.log("  0755 "+java);
+    fs.chmodSync(java, 0755);
+}
 
-console.log('  exec "'+java+'" -version');
-child_process.exec('"'+java+'" -version', {}, function(error, stdout, stderr) {
-	if ((""+stderr).indexOf("openjdk version") >= 0) {
-		console.log("  ✔ Successfully called java");
-	} else {
-		console.log("  ✖ Failed to call '"+java+"': "+error+stderr);
-	}
+// Ok, let's do a test...
+console.log("  exec "+java+"\n");
+ClosureCompiler.testJava(java, function(ok) {
+    if (ok) {
+        console.log("  ✔ Successfully called bundled java\n");
+    } else {
+        console.log("  ✖ Failed to call bundled java, trying global java instead...\n");
+        console.log("  exec "+ClosureCompiler.getGlobalJava()+"\n");
+        ClosureCompiler.testJava(ClosureCompiler.getGlobalJava(), function(ok) {
+            if (ok) {
+                console.log("  ✔ Successfully called global java\n");
+            } else {
+                console.log("  ✖ Failed to call global java, giving up.\n");
+                process.exit(1);
+            }
+        });
+    }
 });
-
-console.log("\n");

@@ -32,12 +32,6 @@
      * @constructor
      */
     var ClosureCompiler = function() {
-
-        /**
-         * Java command.
-         * @type {string}
-         */
-        this.java = ClosureCompiler.getJava();
     };
 
     /**
@@ -53,17 +47,66 @@
             throw("Illegal "+name+" value: "+actual+" ("+expected+" expected)");
         }
     };
+
+    /**
+     * Java extension, e.g. '.exe' on windows.
+     * @type {string}
+     */
+    ClosureCompiler.JAVA_EXT = process.platform == 'win32' ? '.exe' : '';
+
+    /**
+     * Gets the path of the global java executable.
+     * @return {string} Absolute path to or "java(.exe)" if not determinable
+     */
+    ClosureCompiler.getGlobalJava = function() {
+        var java = null;
+        var path = require("path"),
+            fs = require("fs");
+        
+        if (process.env["JAVA_HOME"]) {
+            java = process.env["JAVA_HOME"]+path.sep+"bin"+path.sep+"java"+ClosureCompiler.JAVA_EXT;
+            if (!fs.existsSync(java)) {
+                java = null;
+            }
+        } 
+        if (!java) {
+            java = "java"+require("path");
+        }
+        return java;
+    };
     
     /**
-     * Gets the path of the java executable.
-     * @returns {string} Path to java
+     * Gets the path of the bundled java executable.
+     * @return {string} Absolute path to "java(.exe)"
      */
-    ClosureCompiler.getJava = function() {
-        // Requires scripts/configure.js to have done its job.
-        if ((/^win/i).test(process.platform)) {
-            return __dirname+"/jre/bin/java.exe";
-        }
-        return __dirname+"/jre/bin/java";
+    ClosureCompiler.getBundledJava = function() {
+        var path = require("path");
+        return path.normalize(__dirname+path.sep+"jre"+path.sep+"bin"+path.sep+"java"+ClosureCompiler.JAVA_EXT);
+    };
+
+    /**
+     * Tests if java is callable.
+     * @param {string} java Path to java
+     * @param {function} callback Callback function
+     */
+    ClosureCompiler.testJava = function(java, callback) {
+        var path = require("path");
+        require("child_process").exec('"'+java+'" -version', {}, function(error, stdout, stderr) {
+            if ((""+stderr).indexOf("version \"") >= 0) {
+                callback(true);
+            } else {
+                callback(false);
+            }
+        });
+    };
+
+    /**
+     * Executes a command.
+     * @param {string} cmd Command to execute
+     * @param {function(Error,string,string)} callback Callback function
+     */
+    ClosureCompiler.exec = function(cmd, callback) {
+        require("child_process").exec(cmd, {maxBuffer: 20*1024*1024}, callback);
     };
 
     /**
@@ -177,17 +220,32 @@
             }
         }
 
-        // Run it
-        var cmd = '"'+this.java+'" '+args;
-        child_process.exec(cmd, {
-            maxBuffer: 20*1024*1024
-        }, function(error, stdout, stderr) {
-            if (stderr.length > 0) {
-                callback(new Error(""+stderr), null)
-            } else if (error) {
-                callback(error, null);
+        // Run it     
+        function run(java, args) {
+            ClosureCompiler.exec('"'+java+'" '+args, function(error, stdout, stderr) {
+                if (stderr.length > 0) {
+                    callback(new Error(""+stderr), null)
+                } else if (error) {
+                    callback(error, null);
+                } else {
+                    callback(null, ""+stdout);
+                }
+            });
+        }
+        
+        // Try global java first
+        ClosureCompiler.testJava(ClosureCompiler.getGlobalJava(), function(ok) {
+            if (ok) {
+                run(ClosureCompiler.getGlobalJava(), args);
             } else {
-                callback(null, ""+stdout);
+                // If there is no global java, try the bundled one
+                ClosureCompiler.testJava(ClosureCompiler.getBundledJava(), function(ok) {
+                    if (ok) {
+                        run(ClosureCompiler.getBundledJava(), args);
+                    } else {
+                        throw(new Error("Java is not available, neither the bundled nor a global one."));
+                    }
+                });
             }
         });
     };
