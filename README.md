@@ -59,7 +59,7 @@ The API and `ccjs` support all the command line options of Closure Compiler exce
 
 Externs for `ADVANCED_OPTIMIZATIONS`
 ------------------------------------
-* [Closure Compiler official](http://code.google.com/p/closure-compiler/source/browse/#git%2Fexterns)
+* [Closure Compiler official](http://code.google.com/p/closure-compiler/source/browse/externs)
 * [Closure Compiler contrib](http://code.google.com/p/closure-compiler/source/browse/contrib/externs)
 * [node.js Closure Compiler externs](https://github.com/dcodeIO/node.js-closure-compiler-externs)
 
