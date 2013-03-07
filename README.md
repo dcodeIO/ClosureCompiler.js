@@ -48,7 +48,7 @@ Command line utility
 --------------------
 
 ```bash
-Usage:   ccjs [sourceFiles ...] [--option=value --flagOption ...] [> outFile]
+Usage:   ccjs sourceFiles ... [--option=value --flagOption ...] [> outFile]
 ```
 
 #### Available options ####

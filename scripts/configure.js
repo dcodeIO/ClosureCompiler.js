@@ -28,7 +28,9 @@ if ((/^win/i).test(process.platform)) {
     fs.renameSync(__dirname+"/../jre/bin_windows", __dirname+"/../jre/bin");
 } else if ((/^darwin/i).test(process.platform)) {
     fs.renameSync(__dirname+"/../jre/bin_mac", __dirname+"/../jre/bin");
+    fs.chmodSync(__dirname+"/../jre/bin/java", 0755);
 } else {
     fs.renameSync(__dirname+"/../jre/bin_linux", __dirname+"/../jre/bin");
+    fs.chmodSync(__dirname+"/../jre/bin/java", 0755);
 }
 console.log("Complete.");
