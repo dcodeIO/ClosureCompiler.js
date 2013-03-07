@@ -1,4 +1,4 @@
-ClosureCompiler.js - Closure Compiler for node.js
+ClosureCompiler.js - Closure Compiler for node.js [![Build Status](https://travis-ci.org/dcodeIO/ClosureCompiler.js.png?branch=master)](https://travis-ci.org/dcodeIO/ClosureCompiler.js)
 =================================================
 
 Automatically downloads and installs [Closure Compiler](https://developers.google.com/closure/compiler/) and provides
