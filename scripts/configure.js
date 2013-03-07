@@ -20,17 +20,39 @@
  * see: https://github.com/dcodeIO/ClosureCompiler.js for details
  */
 
-var fs = require("fs");
+var fs = require("fs"),
+    path = require("path"),
+	child_process = require("child_process");
 
-console.log("Configuring ClosureCompiler.js for platform '"+process.platform+"' ...");
-fs.chmodSync(__dirname+"/../jre", 0755);
+console.log("Configuring ClosureCompiler.js for platform '"+process.platform+"' ...\n");
+var jre = path.normalize(__dirname+path.sep+".."+path.sep+"jre");
+console.log("  0755 "+jre);
+fs.chmodSync(jre, 0755);
+var dirname, ext = "";
 if ((/^win/i).test(process.platform)) {
-    fs.renameSync(__dirname+"/../jre/bin_windows", __dirname+"/../jre/bin");
+    dirname = "bin_windows";
+    ext = ".exe";
 } else if ((/^darwin/i).test(process.platform)) {
-    fs.renameSync(__dirname+"/../jre/bin_mac", __dirname+"/../jre/bin");
-    fs.chmodSync(__dirname+"/../jre/bin/java", 0755);
+    dirname = "bin_mac";
 } else {
-    fs.renameSync(__dirname+"/../jre/bin_linux", __dirname+"/../jre/bin");
-    fs.chmodSync(__dirname+"/../jre/bin/java", 0755);
+    dirname = "bin_linux";
 }
-console.log("Complete.");
+var from = path.normalize(__dirname+path.sep+".."+path.sep+"jre"+path.sep+dirname);
+var to = path.normalize(__dirname+path.sep+".."+path.sep+"jre"+path.sep+"bin");
+var java = to+path.sep+"java"+ext;
+
+console.log("  '"+from+"' -> '"+to+"'");
+fs.renameSync(from, to);
+console.log("  0755 "+java);
+fs.chmodSync(java, 0755);
+
+console.log('  exec "'+java+'" -version');
+child_process.exec('"'+java+'" -version', {}, function(error, stdout, stderr) {
+	if ((""+stderr).indexOf("openjdk version") >= 0) {
+		console.log("  ✔ Successfully called java");
+	} else {
+		console.log("  ✖ Failed to call '"+java+"': "+error+stderr);
+	}
+});
+
+console.log("\n");
