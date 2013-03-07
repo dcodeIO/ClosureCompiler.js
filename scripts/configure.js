@@ -47,7 +47,7 @@ download(ccUrl, ccTempFile, function(error, bytes) {
         console.log("  ✖ Download failed: "+error+"\n");
         fail();
     }
-    console.log("  ✔ Download complete: "+ccTempFile+" ("+parseInt(bytes/mb, 10)+" mb)");
+    console.log("  ✔ Download complete: "+ccTempFile+" ("+parseInt(bytes/mb, 10)+" mb)\n");
     require("sleep").sleep(1);
     console.log("  Unpacking "+ccTempFile+" ...");
     unpack(ccTempFile, function(error) {
@@ -87,7 +87,7 @@ function configure_jre() {
                     console.log("    ✖ Download failed: "+error+"\n");
                     fail();
                 }
-                console.log("    ✔ Download complete: "+jreTempFile+" ("+parseInt(bytes/mb, 10)+" mb)");
+                console.log("    ✔ Download complete: "+jreTempFile+" ("+parseInt(bytes/mb, 10)+" mb)\n");
                 require("sleep").sleep(1);
                 console.log("      Unpacking "+jreTempFile+" ...");
                 unpack(jreTempFile, function(error) {
@@ -131,6 +131,7 @@ function download(downloadUrl, filename, callback, ondata) {
             total = parseInt(res.headers["content-length"], 10);
         }
         if (res.statusCode != 200) {
+            res.setEncoding(null);
             callback(new Error("Download failed: HTTP status code "+res.statusCode), -1);
             return;
         }
