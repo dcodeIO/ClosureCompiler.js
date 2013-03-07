@@ -17,7 +17,7 @@ Install: `npm -g install closurecompiler` (this will automatically test for Java
 
 ClosureCompiler
 ---------------
-The API is quite simple:
+The API is quite simple and fully explained in a few lines of code:
 
 ```javascript
 var ClosureCompiler = require("closurecompiler");
@@ -26,10 +26,11 @@ var cc = new ClosureCompiler();
 cc.compile(
     ['file1.js', 'file2.js',
     {
-        compilation_level: "ADVANCED_OPTIMIZATIONS",
-        externs: ["externs/file3.js", "externs/contrib/"], // Specify a directory to include everything inside
-        ...
-    },
+        compilation_level: "ADVANCED_OPTIMIZATIONS",          // Options in the API exclude the trailing "--"
+        formatting: "PRETTY_PRINT",
+        externs: ["externs/file3.js", "externs/contrib/"],    // Specify a directory to include everything inside,
+        ...                                                   // As you see, multiple options with the same name are
+    },                                                        // specified using an array.
     function(error, result) {
         if (error) {
             // Display error...

@@ -1,0 +1,5 @@
+node_modules
+npm-debug.log
+compiler/compiler.jar
+compiler/COPYING
+compiler/README
