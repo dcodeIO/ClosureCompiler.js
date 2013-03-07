@@ -80,9 +80,13 @@ for (var i=2; i<process.argv.length; i++) {
 var cc = new ClosureCompiler();
 cc.compile(files, options, function(error, result) {
     if (help) {
+        help = error.message;
+        help = help.replace(/(\-\-[a-zA-Z0-9_]+) ([^ ])/g, function($, $1, $2) {
+            return $1+"="+$2;
+        });
         console.error("ClosureCompiler.js "+pkg.version+" - https://github.com/dcodeIO/ClosureCompiler.js\n");
         console.error("  Usage:   "+path.basename(process.argv[1])+" sourceFiles ... [--option=value --flagOption ...] [> outFile]\n");
-        console.error(error.message);
+        console.error(help);
         process.exit(0);
     }
     if (error) throw(error);
