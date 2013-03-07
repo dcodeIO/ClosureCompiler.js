@@ -78,7 +78,7 @@ options taken from `cc --help`:
                                           CommonJS module names.
  --compilation_level [WHITESPACE_ONLY   : Specifies the compilation level to
  | SIMPLE_OPTIMIZATIONS | ADVANCED_OPTI : use. Options: WHITESPACE_ONLY,
- MIZATIONS]                             : SIMPLE_OPTIMIZATIONS, ADVANCED_OPTIMIZ
+   MIZATIONS]                           : SIMPLE_OPTIMIZATIONS, ADVANCED_OPTIMIZ
                                           ATIONS
  --create_name_map_files                : If true, variable renaming and
                                           property renaming map files will be
@@ -110,7 +110,7 @@ options taken from `cc --help`:
  --flagfile VAL                         : A file containing additional command-l
                                           ine options.
  --formatting [PRETTY_PRINT | PRINT_INP : Specifies which formatting options,
- UT_DELIMITER | SINGLE_QUOTES]          : if any, should be applied to the
+   UT_DELIMITER | SINGLE_QUOTES]        : if any, should be applied to the
                                           output JS. Options: PRETTY_PRINT,
                                           PRINT_INPUT_DELIMITER, SINGLE_QUOTES
  --generate_exports                     : Generates export code for those
@@ -244,7 +244,7 @@ options taken from `cc --help`:
                                           the property renaming map produced
                                           should be saved
  --source_map_format [V1 | DEFAULT |    : The source map format to produce.
- V2 | V3]                               : Options: V1, V2, V3, DEFAULT. DEFAULT
+   V2 | V3]                             : Options: V1, V2, V3, DEFAULT. DEFAULT
                                           produces V2.
  --summary_detail_level N               : Controls how detailed the compilation
                                           summary is. Values: 0 (never print
@@ -280,7 +280,7 @@ options taken from `cc --help`:
                                           should be saved
  --version                              : Prints the compiler version to stderr.
  --warning_level [QUIET | DEFAULT |     : Specifies the warning level to use.
- VERBOSE]                               : Options: QUIET, DEFAULT, VERBOSE
+   VERBOSE]                             : Options: QUIET, DEFAULT, VERBOSE
  --warnings_whitelist_file VAL          : A file containing warnings to
                                           suppress. Each line should be of the
                                           form
