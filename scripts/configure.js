@@ -23,50 +23,188 @@
 var ClosureCompiler = require(__dirname+"/../ClosureCompiler.js"),
     fs = require("fs"),
     path = require("path"),
-	child_process = require("child_process");
+	child_process = require("child_process"),
+    pkg = require(__dirname+"/../package.json");
 
-// Basically: Rename the platform's bin_* directory to bin and set necessary file permissions
-var to = path.normalize(__dirname+path.sep+".."+path.sep+"jre"+path.sep+"bin");
-var java = to+path.sep+"java"+ClosureCompiler.JAVA_EXT;
+// Bundled JRE download url
+var jreUrl = "http://bundled-openjdk-jre.googlecode.com/files/OpenJDK-JRE-7u6_24.zip";
 
-if (fs.existsSync(__dirname+"/../jre/bin")) {
-    console.log("ClosureCompiler.js's bundled JRE is already configured\n");
-} else {
-    console.log("Configuring ClosureCompiler.js's bundled JRE for platform '"+process.platform+"' ...\n");
-    var jre = path.normalize(__dirname+path.sep+".."+path.sep+"jre");
-    console.log("  0755 "+jre);
-    fs.chmodSync(jre, 0755);
-    var dirname, ext = "";
-    if ((/^win/i).test(process.platform)) {
-        dirname = "bin_windows";
-        ext = ".exe";
-    } else if ((/^darwin/i).test(process.platform)) {
-        dirname = "bin_mac";
-    } else {
-        dirname = "bin_linux";
-    }
-    var from = path.normalize(__dirname+path.sep+".."+path.sep+"jre"+path.sep+dirname);
-    console.log("  '"+from+"' -> '"+to+"'");
-    fs.renameSync(from, to);
-    console.log("  0755 "+java);
-    fs.chmodSync(java, 0755);
-}
+// Temporary file for the download
+var jreTempFile = __dirname+path.sep+".."+path.sep+"jre"+path.sep+"OpenJDK-JRE.zip";
 
-// Ok, let's do a test...
-console.log("  exec "+java+"\n");
-ClosureCompiler.testJava(java, function(ok) {
+// Test if there is already a global Java so we don't need to download anything
+console.log("Configuring ClosureCompiler.js "+pkg.version+" ...\n");
+ClosureCompiler.testJava(ClosureCompiler.getGlobalJava(), function(ok) {
     if (ok) {
-        console.log("  ✔ Successfully called bundled java\n");
+        console.log("  ✔ Global Java is available, perfect!\n");
+        // Travis CI for example has one, so we save their bandwidth. And Google's. And yours. And...
+        finish();
     } else {
-        console.log("  ✖ Failed to call bundled java, trying global java instead...\n");
-        console.log("  exec "+ClosureCompiler.getGlobalJava()+"\n");
-        ClosureCompiler.testJava(ClosureCompiler.getGlobalJava(), function(ok) {
-            if (ok) {
-                console.log("  ✔ Successfully called global java\n");
-            } else {
-                console.log("  ✖ Failed to call global java, giving up.\n");
-                process.exit(1);
+        console.log("  ✖ Global Java not found, we need to install the bundled JRE ...");
+        console.log("    Downloading "+jreUrl+" ...");
+        var lastBytes = 0, currentBytes = 0, mb = 1024*1024;
+        download(jreUrl, jreTempFile, function(error, bytes) {
+            if (error) {
+                console.log("    ✖ Download failed: "+error+"\n");
+                fail();
+            }
+            console.log("    ✔ Download complete: "+jreTempFile+" ("+parseInt(bytes/mb, 10)+" mb)");
+            console.log("      Unpacking "+jreTempFile+" ...");
+            unpack(jreTempFile, function(error) {
+                if (error) {
+                    console.log("    ✖ Unpack failed: "+error+"\n");
+                    fail();
+                }
+                console.log("    ✔ Unpack complete.\n");
+                configure();
+                runTest();
+            });
+        }, function(bytes, total) {
+            currentBytes += bytes;
+            if (currentBytes == bytes || currentBytes - lastBytes >= mb) {
+                console.log("    | "+parseInt(currentBytes/mb, 10)+" / "+(total > 0 ? parseInt(total/mb, 10) : "???")+" mb");
+                lastBytes = currentBytes;
             }
         });
     }
 });
+
+/**
+ * Downloads a file.
+ * @param {string} downloadUrl
+ * @param {string} filename
+ * @param {function(?Error,number)} callback
+ * @param {function(number)=} ondata
+ */
+function download(downloadUrl, filename, callback, ondata) {
+    var url = require("url").parse(downloadUrl);
+    var out = require("fs").createWriteStream(filename, { flags: 'w', mode: 0666 });
+    var bytes = 0, total = -1;
+    var req = require("http").request({
+        "hostname": url["host"],
+        "method": "GET",
+        "path": url["path"]
+    }, function(res) {
+        if (res.headers["content-length"]) {
+            total = parseInt(res.headers["content-length"], 10);
+        }
+        if (res.statusCode != 200) {
+            callback(new Error("Download failed: HTTP status code "+res.statusCode), -1);
+            return;
+        }
+        res.on("data", function(chunk) {
+            bytes += chunk.length;
+            if (ondata) ondata(chunk.length, total);
+            out.write(chunk);
+        });
+
+        res.on("end", function() {
+            callback(null, bytes);
+        });
+    });
+    req.on("error", function(e) {
+        callback(e, -1);
+    });
+    req.end();
+}
+
+/**
+ * Unpacks a file in place.
+ * @param {string} filename File name
+ * @param {function(?Error)} callback
+ */
+function unpack(filename, callback) {
+    try {
+        var AdmZip = require("adm-zip");
+        var zip = new AdmZip(filename);
+        zip.extractAllTo(path.dirname(filename), true);
+        callback(null);
+    } catch (e) {
+        callback(e);
+    }   
+}
+
+/**
+ * Configures our bundled Java.
+ */
+function configure() {
+    // Basically: Rename the platform's bin_* directory to bin and set necessary file permissions
+    var to = path.normalize(__dirname+path.sep+".."+path.sep+"jre"+path.sep+"bin");
+    var java = to+path.sep+"java"+ClosureCompiler.JAVA_EXT;
+    console.log("  Configuring bundled JRE for platform '"+process.platform+"' ...");
+    if (fs.existsSync(__dirname+"/../jre/bin")) {
+        console.log("  ✔ Bundled JRE is already configured.\n");
+    } else {
+        var jre = path.normalize(__dirname+path.sep+".."+path.sep+"jre");
+        console.log("  | 0755 "+jre);
+        fs.chmodSync(jre, 0755);
+        var dirname;
+        if ((/^win/i).test(process.platform)) {
+            dirname = "bin_windows";
+        } else if ((/^darwin/i).test(process.platform)) {
+            dirname = "bin_mac";
+        } else {
+            dirname = "bin_linux";
+        }
+        var from = path.normalize(__dirname+path.sep+".."+path.sep+"jre"+path.sep+dirname);
+        fs.chmodSync(from, 0755);
+        console.log("  | "+from+" -> "+to+"");
+        fs.renameSync(from, to);
+        console.log("  | 0755 "+java);
+        fs.chmodSync(java, 0755);
+        console.log("  Complete.\n");
+    }
+
+}
+
+/**
+ * Runs the final test.
+ */
+function runTest() {
+    console.log("  Testing bundled Java ...");
+    console.log("  | exec "+ClosureCompiler.getBundledJava());
+    ClosureCompiler.testJava(ClosureCompiler.getBundledJava(), function(ok) {
+        if (ok) {
+            console.log("  ✔ Successfully called bundled Java!\n");
+            finish();
+        } else {
+            console.log("  ✖ Failed to call bundled java, trying global java instead ...");
+            console.log("    | exec "+ClosureCompiler.getGlobalJava()+"\n");
+            ClosureCompiler.testJava(ClosureCompiler.getGlobalJava(), function(ok) {
+                if (ok) {
+                    console.log("    ✔ Successfully called global Java!\n");
+                    finish();
+                } else {
+                    console.log("    ✖ Failed to call global Java.\n");
+                    fail();
+                }
+            });
+        }
+    });
+}
+
+/**
+ * Cleans up.
+ */
+function cleanUp() {
+    try { fs.unlinkSync(jreTempFile); } catch (e) {}
+    // ...your harddrive's space.
+}
+
+/**
+ * Fails.
+ */
+function fail() {
+    cleanUp();
+    console.log("  ✖ Unfortunately, ClosureCompiler.js could not be configured.");
+    console.log("    See: https://github.com/dcodeIO/ClosureCompiler.js (create an issue maybe)\n");
+    process.exit(1);
+}
+
+/**
+ * Finishes.
+ */
+function finish() {
+    cleanUp();
+    console.log("  ✔ ClosureCompiler.js has successfully been configured. Have fun!\n");
+}

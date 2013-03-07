@@ -1,8 +1,9 @@
 ClosureCompiler.js - Closure Compiler for node.js [![Build Status](https://travis-ci.org/dcodeIO/ClosureCompiler.js.png?branch=master)](https://travis-ci.org/dcodeIO/ClosureCompiler.js)
 =================================================
 
-The all-round carefree package. Includes [Closure Compiler](https://developers.google.com/closure/compiler/) and a JRE
-built from [OpenJDK](http://openjdk.java.net). Zero dependencies, no environment variables to set, works out of the box.
+The all-round carefree package. Includes [Closure Compiler](https://developers.google.com/closure/compiler/) and 
+downloads a JRE built from [OpenJDK](http://openjdk.java.net) if required. No environment variables to set, works out of
+the box.
 
 *-- „Stop uglifying, be a man!“*
 
@@ -61,6 +62,7 @@ Externs for `ADVANCED_OPTIMIZATIONS`
 ------------------------------------
 * [Closure Compiler official](http://code.google.com/p/closure-compiler/source/browse/externs)
 * [Closure Compiler contrib](http://code.google.com/p/closure-compiler/source/browse/contrib/externs)
+* [Closure Compiler common libraries](https://code.google.com/p/closure-compiler/wiki/ExternsForCommonLibraries)
 * [node.js Closure Compiler externs](https://github.com/dcodeIO/node.js-closure-compiler-externs)
 
 *-- „Be a hero!“*
