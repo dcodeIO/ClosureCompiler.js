@@ -49,7 +49,7 @@ download(ccUrl, ccTempFile, function(error, bytes) {
     }
     console.log("  ✔ Download complete: "+ccTempFile+" ("+parseInt(bytes/mb, 10)+" mb)");
     require("sleep").sleep(1);
-    console.log("    Unpacking "+ccTempFile+" ...");
+    console.log("  Unpacking "+ccTempFile+" ...");
     unpack(ccTempFile, function(error) {
         if (error) {
             console.log("  ✖ Unpack failed: "+error+"\n");
@@ -119,12 +119,13 @@ function configure_jre() {
  */
 function download(downloadUrl, filename, callback, ondata) {
     var url = require("url").parse(downloadUrl);
-    var out = require("fs").createWriteStream(filename, { flags: 'w', mode: 0666 });
+    var out = require("fs").createWriteStream(filename, { flags: 'w', encoding: null, mode: 0666 });
     var bytes = 0, total = -1;
     var req = require("http").request({
         "hostname": url["host"],
         "method": "GET",
-        "path": url["path"]
+        "path": url["path"],
+        "agent": false
     }, function(res) {
         if (res.headers["content-length"]) {
             total = parseInt(res.headers["content-length"], 10);
