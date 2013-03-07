@@ -59,11 +59,11 @@
      * @returns {string} Path to java
      */
     ClosureCompiler.getJava = function() {
-        var java = process.env["JAVA_HOME"] ? process.env["JAVA_HOME"]+"/bin/java" : "java";
-        if (!require("fs").existsSync(java)) {
-            java = "java";
+        // Requires scripts/configure.js to have done its job.
+        if ((/^win/i).test(process.platform)) {
+            return __dirname+"/jre/bin/java.exe";
         }
-        return java;
+        return __dirname+"/jre/bin/java";
     };
 
     /**

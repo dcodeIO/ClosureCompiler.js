@@ -1,22 +1,18 @@
 ClosureCompiler.js - Closure Compiler for node.js [![Build Status](https://travis-ci.org/dcodeIO/ClosureCompiler.js.png?branch=master)](https://travis-ci.org/dcodeIO/ClosureCompiler.js)
 =================================================
 
-Automatically downloads and installs [Closure Compiler](https://developers.google.com/closure/compiler/) and provides
-bindings and a convenient command line utility to run it.
+The all-round carefree package. Includes [Closure Compiler](https://developers.google.com/closure/compiler/) and a JRE
+built from [OpenJDK](http://openjdk.java.net). No dependencies, no environment variables to set, works out of the box.
+
+-- „Stop uglifying, be a man!“
 
 Installation
 ------------
 
-ClosureCompiler.js requires a Java Runtime Environment to be installed and correctly set up. Correctly set up means that
-at least one of the following conditions is met:
+Install: `npm -g install closurecompiler` (50mb)
 
-* **JRE:** Add the jre/bin directory to your PATH environment variable
-* **JDK:** Set the JAVA_HOME environment variable to point to the jdk directory (not jdk/bin)
-
-Install: `npm -g install closurecompiler` (this will automatically test for Java)
-
-ClosureCompiler
----------------
+ClosureCompiler API
+-------------------
 The API is quite simple and fully explained in a few lines of code:
 
 ```javascript
@@ -64,3 +60,9 @@ Actually `ccjs` supports all the command line options of Closure Compiler, excep
 License (ClosureCompiler.js and Closure Compiler itself)
 --------------------------------------------------------
 Apache License, Version 2.0 - http://www.apache.org/licenses/LICENSE-2.0.html
+
+License (JRE)
+-------------
+Binary License for OpenJDK - http://openjdk.java.net/legal/binary-license-2007-05-08.html
+
+This repository is not officially supported by Google or Oracle. All rights belong to their respective owners.
