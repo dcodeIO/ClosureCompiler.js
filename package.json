@@ -1,6 +1,6 @@
 {
     "name": "closurecompiler",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "author": "Daniel Wirtz <dcode@dcode.io>",
     "description": "Closure Compiler for node.js",
     "contributors": [

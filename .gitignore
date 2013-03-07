@@ -1,3 +1,7 @@
 node_modules
 npm-debug.log
 backup/
+jre/bin_windows
+jre/bin_linux
+jre/bin/mac
+jre/lib

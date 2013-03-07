@@ -26,48 +26,86 @@ var ClosureCompiler = require(__dirname+"/../ClosureCompiler.js"),
 	child_process = require("child_process"),
     pkg = require(__dirname+"/../package.json");
 
+console.log("Configuring ClosureCompiler.js "+pkg.version+" ...\n");
+
+// Closure Compiler download url
+var ccUrl = "http://closure-compiler.googlecode.com/files/compiler-latest.zip";
+
+// Temporary file for the download
+var ccTempFile = path.normalize(__dirname+path.sep+".."+path.sep+"compiler"+path.sep+"compiler.zip");
+
 // Bundled JRE download url
 var jreUrl = "http://bundled-openjdk-jre.googlecode.com/files/OpenJDK-JRE-7u6_24.zip";
 
 // Temporary file for the download
-var jreTempFile = __dirname+path.sep+".."+path.sep+"jre"+path.sep+"OpenJDK-JRE.zip";
+var jreTempFile = path.normalize(__dirname+path.sep+".."+path.sep+"jre"+path.sep+"OpenJDK-JRE.zip");
 
-// Test if there is already a global Java so we don't need to download anything
-console.log("Configuring ClosureCompiler.js "+pkg.version+" ...\n");
-ClosureCompiler.testJava(ClosureCompiler.getGlobalJava(), function(ok) {
-    if (ok) {
-        console.log("  ✔ Global Java is available, perfect!\n");
-        // Travis CI for example has one, so we save their bandwidth. And Google's. And yours. And...
-        finish();
-    } else {
-        console.log("  ✖ Global Java not found, we need to install the bundled JRE ...");
-        console.log("    Downloading "+jreUrl+" ...");
-        var lastBytes = 0, currentBytes = 0, mb = 1024*1024;
-        download(jreUrl, jreTempFile, function(error, bytes) {
-            if (error) {
-                console.log("    ✖ Download failed: "+error+"\n");
-                fail();
-            }
-            console.log("    ✔ Download complete: "+jreTempFile+" ("+parseInt(bytes/mb, 10)+" mb)");
-            console.log("      Unpacking "+jreTempFile+" ...");
-            unpack(jreTempFile, function(error) {
-                if (error) {
-                    console.log("    ✖ Unpack failed: "+error+"\n");
-                    fail();
-                }
-                console.log("    ✔ Unpack complete.\n");
-                configure();
-                runTest();
-            });
-        }, function(bytes, total) {
-            currentBytes += bytes;
-            if (currentBytes == bytes || currentBytes - lastBytes >= mb) {
-                console.log("    | "+parseInt(currentBytes/mb, 10)+" / "+(total > 0 ? parseInt(total/mb, 10) : "???")+" mb");
-                lastBytes = currentBytes;
-            }
-        });
+console.log("  Downloading Closure Compiler ...");
+var lastBytes = 0, currentBytes = 0, mb = 1024*1024;
+download(ccUrl, ccTempFile, function(error, bytes) {
+    if (error) {
+        console.log("  ✖ Download failed: "+error+"\n");
+        fail();
+    }
+    console.log("  ✔ Download complete: "+ccTempFile+" ("+parseInt(bytes/mb, 10)+" mb)");
+    unpack(ccTempFile, function(error) {
+        if (error) {
+            console.log("  ✖ Unpack failed: "+error+"\n");
+            fail();
+        }
+        console.log("  ✔ Unpack complete.\n");
+        configure_jre();
+    });
+}, function(bytes, total) {
+    currentBytes += bytes;
+    if (currentBytes == bytes || currentBytes - lastBytes >= mb) {
+        console.log("  | "+parseInt(currentBytes/mb, 10)+" / "+(total > 0 ? parseInt(total/mb, 10) : "???")+" mb");
+        lastBytes = currentBytes;
     }
 });
+
+/**
+ * Configures the JRE.
+ */
+function configure_jre() {
+    console.log("  Configuring JRE ...");
+    
+    // Test if there is already a global Java so we don't need to download anything
+    ClosureCompiler.testJava(ClosureCompiler.getGlobalJava(), function(ok) {
+        if (ok) {
+            console.log("  ✔ Global Java is available, perfect!\n");
+            // Travis CI for example has one, so we save their bandwidth. And Google's. And yours. And...
+            finish();
+        } else {
+            console.log("  ✖ Global Java not found, we need to install the bundled JRE ...");
+            console.log("    Downloading "+jreUrl+" ...");
+            lastBytes = 0; currentBytes = 0;
+            download(jreUrl, jreTempFile, function(error, bytes) {
+                if (error) {
+                    console.log("    ✖ Download failed: "+error+"\n");
+                    fail();
+                }
+                console.log("    ✔ Download complete: "+jreTempFile+" ("+parseInt(bytes/mb, 10)+" mb)");
+                console.log("      Unpacking "+jreTempFile+" ...");
+                unpack(jreTempFile, function(error) {
+                    if (error) {
+                        console.log("    ✖ Unpack failed: "+error+"\n");
+                        fail();
+                    }
+                    console.log("    ✔ Unpack complete.\n");
+                    configure();
+                    runTest();
+                });
+            }, function(bytes, total) {
+                currentBytes += bytes;
+                if (currentBytes == bytes || currentBytes - lastBytes >= mb) {
+                    console.log("    | "+parseInt(currentBytes/mb, 10)+" / "+(total > 0 ? parseInt(total/mb, 10) : "???")+" mb");
+                    lastBytes = currentBytes;
+                }
+            });
+        }
+    });
+}
 
 /**
  * Downloads a file.
@@ -187,6 +225,7 @@ function runTest() {
  * Cleans up.
  */
 function cleanUp() {
+    try { fs.unlinkSync(ccTempFile); } catch (e) {}
     try { fs.unlinkSync(jreTempFile); } catch (e) {}
     // ...your harddrive's space.
 }
