@@ -39,11 +39,12 @@ ClosureCompiler.compile(
         ...
     },
     function(error, result) {
-        if (error) {
-            // Display error...
+        if (result) {
+            // Write result to file
+            // Display error (warnings from stderr)
         } else {
-            // Write result to file...
-        }
+            // Display error...
+         }
     }
 );
 ```
