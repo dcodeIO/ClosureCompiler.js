@@ -31,6 +31,8 @@
         "test": "node tests/test.js",
         
         "configure": "node scripts/configure.js",
-        "make": "ccjs ClosureCompiler.js --externs=./externs --compilation_level=ADVANCED_OPTIMIZATIONS > ClosureCompiler.min.js"
+        "make": "npm run-script compile && npm test && npm run-script jsdoc",
+        "compile": "ccjs ClosureCompiler.js --externs=./externs --compilation_level=ADVANCED_OPTIMIZATIONS > ClosureCompiler.min.js",
+        "jsdoc": "jsdoc -c jsdoc.json"
     }
 }

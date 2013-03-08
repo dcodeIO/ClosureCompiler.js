@@ -32,7 +32,7 @@
     
     /**
      * Constructs a new ClosureCompiler.
-     * @exports ClosureCompiler.
+     * @exports ClosureCompiler
      * @class Bindings for Closure Compiler.
      * @constructor
      */
