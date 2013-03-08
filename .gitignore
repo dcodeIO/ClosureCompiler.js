@@ -1,9 +1,9 @@
 node_modules
 npm-debug.log
 backup/
-compiler/compiler.zip
+compiler/compiler.tar.gz
 compiler/compiler.jar
-jre/OpenJDK-JRE.zip
+jre/jre.tar.gz
 jre/bin_windows
 jre/bin_linux
 jre/bin/mac

@@ -17,8 +17,8 @@
     "bugs": "https://github.com/dcodeIO/ClosureCompiler.js/issues",
     "keywords": ["closure compiler", "closure", "compiler", "util", "utility"],
     "dependencies": {
-        "adm-zip": ">=0.2.1",
-        "sleep": ">=1.1"
+        "tar": "*",
+        "sleep": "*"
     },
     "license": "Apache License, Version 2.0",
     "engines": {
