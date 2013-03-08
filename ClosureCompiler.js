@@ -24,6 +24,11 @@
     if ((typeof window != 'undefined' && !!window.window) || typeof require != 'function') {
         throw(new Error("ClosureCompiler.js can only be used within node.js"));
     }
+
+    // Dependencies
+    var path = require("path"),
+        fs = require("fs"),
+        child_process = require("child_process");
     
     /**
      * Constructs a new ClosureCompiler.
@@ -41,8 +46,9 @@
      * @param {Array} expected Expected values
      * @throw {Error} If the option is invalid
      * @return {string} Validated option
+     * @private
      */
-    ClosureCompiler.assertOption = function(name, actual, expected) {
+    ClosureCompiler._assertOption = function(name, actual, expected) {
         if (expected.indexOf(actual) < 0) {
             throw("Illegal "+name+" value: "+actual+" ("+expected+" expected)");
         }
@@ -51,17 +57,17 @@
     /**
      * Java extension, e.g. '.exe' on windows.
      * @type {string}
+     * @expose
      */
     ClosureCompiler.JAVA_EXT = process.platform == 'win32' ? '.exe' : '';
 
     /**
      * Gets the path of the global java executable.
      * @return {string} Absolute path to or "java(.exe)" if not determinable
+     * @expose
      */
     ClosureCompiler.getGlobalJava = function() {
         var java = null;
-        var path = require("path"),
-            fs = require("fs");
         
         if (process.env["JAVA_HOME"]) {
             java = process.env["JAVA_HOME"]+path.sep+"bin"+path.sep+"java"+ClosureCompiler.JAVA_EXT;
@@ -70,7 +76,7 @@
             }
         } 
         if (!java) {
-            java = "java"+require("path");
+            java = "java";
         }
         return java;
     };
@@ -78,35 +84,26 @@
     /**
      * Gets the path of the bundled java executable.
      * @return {string} Absolute path to "java(.exe)"
+     * @expose
      */
     ClosureCompiler.getBundledJava = function() {
-        var path = require("path");
         return path.normalize(__dirname+path.sep+"jre"+path.sep+"bin"+path.sep+"java"+ClosureCompiler.JAVA_EXT);
     };
 
     /**
      * Tests if java is callable.
      * @param {string} java Path to java
-     * @param {function} callback Callback function
+     * @param {function(boolean)} callback Callback function
+     * @expose
      */
     ClosureCompiler.testJava = function(java, callback) {
-        var path = require("path");
-        require("child_process").exec('"'+java+'" -version', {}, function(error, stdout, stderr) {
+        child_process.exec('"'+java+'" -version', {}, function(error, stdout, stderr) {
             if ((""+stderr).indexOf("version \"") >= 0) {
                 callback(true);
             } else {
                 callback(false);
             }
         });
-    };
-
-    /**
-     * Executes a command.
-     * @param {string} cmd Command to execute
-     * @param {function(Error,string,string)} callback Callback function
-     */
-    ClosureCompiler.exec = function(cmd, callback) {
-        require("child_process").exec(cmd, {maxBuffer: 20*1024*1024}, callback);
     };
 
     /**
@@ -117,6 +114,7 @@
      *  in it.
      * @param {function(Error,string)} callback Callback called with the error, if any, and the compiled code
      * @throws {Error} If the file cannot be compiled
+     * @expose
      */
     ClosureCompiler.compile = function(files, options, callback) {
         new ClosureCompiler().compile(files, options, callback);
@@ -130,6 +128,7 @@
      *  in it.
      * @param {function(Error,string)} callback Callback called with the error, if any, and the compiled code
      * @throws {Error} If the file cannot be compiled
+     * @expose
      */
     ClosureCompiler.prototype.compile = function(files, options, callback) {
         options = options || {};
@@ -144,10 +143,6 @@
         delete options["js"];
         delete options["js_output_file"];
         
-        var path = require("path"),
-            fs = require("fs"),
-            util = require("util"),
-            child_process = require("child_process");
         var args = '-jar "'+__dirname+'/compiler/compiler.jar"';
         
         // Source files
@@ -156,11 +151,11 @@
         }
         for (i=0; i<files.length; i++) {
             if (typeof files[i] != 'string' || files[i].indexOf('"') >= 0) {
-                throw("Illegal source file: "+files[i]);
+                throw(new Error("Illegal source file: "+files[i]));
             }
             stat = fs.statSync(files[i]);
             if (!stat.isFile()) {
-                throw("Source file not found: "+files[i]);
+                throw(new Error("Source file not found: "+files[i]));
             }
             args += ' --js "'+files[i]+'"';
         }
@@ -187,7 +182,7 @@
             } else if (stat.isFile()) {
                 externs.push(options.externs[i]);
             } else {
-                throw("Externs file not found: "+options.externs[i]);
+                throw(new Error("Externs file not found: "+options.externs[i]));
             }
         }
         delete options["externs"];
@@ -219,10 +214,15 @@
                 }
             }
         }
+        
+        // Executes a command
+        function exec(cmd, callback) {
+            require("child_process").exec(cmd, {maxBuffer: 20*1024*1024}, callback);
+        }
 
         // Run it     
         function run(java, args) {
-            ClosureCompiler.exec('"'+java+'" '+args, function(error, stdout, stderr) {
+            exec('"'+java+'" '+args, function(error, stdout, stderr) {
                 if (stderr.length > 0) {
                     callback(new Error(""+stderr), null)
                 } else if (error) {
@@ -253,11 +253,12 @@
     /**
      * Returns a string representation of this object.
      * @returns {string} String representation as of "ClosureCompiler"
+     * @expose
      */
     ClosureCompiler.prototype.toString = function() {
         return "ClosureCompiler";
     };
     
-    module.exports = ClosureCompiler;
+    module["exports"] = ClosureCompiler;
     
 })(this);
