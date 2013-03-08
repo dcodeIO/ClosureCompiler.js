@@ -89,5 +89,5 @@ ClosureCompiler.compile(files, options, function(error, result) {
         process.exit(0);
     }
     if (error) throw(error);
-    console.log(result);
+    process.stdout.write(result);
 });

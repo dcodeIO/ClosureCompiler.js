@@ -30,6 +30,7 @@
         "postupdate": "npm run-script configure",
         "test": "node tests/test.js",
         
-        "configure": "node scripts/configure.js"
+        "configure": "node scripts/configure.js",
+        "make": "ccjs ClosureCompiler.js --externs=./externs --compilation_level=ADVANCED_OPTIMIZATIONS > ClosureCompiler.min.js"
     }
 }

@@ -1,4 +1,4 @@
-var ClosureCompiler = require(__dirname+"/../ClosureCompiler.js");
+var ClosureCompiler = require(__dirname+"/../ClosureCompiler.min.js");
 
 ClosureCompiler.compile(__filename, {}, function(error, result) {
     if (error) {
