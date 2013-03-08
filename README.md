@@ -70,6 +70,13 @@ Externs for `ADVANCED_OPTIMIZATIONS`
 
 *-- „Be a hero!“*
 
+#### Externs for node.js ####
+ClosureCompiler.js depends on the [closurecompiler-externs](https://npmjs.org/package/closurecompiler-externs) package,
+an npm distribution of [node.js Closure Compiler Externs](https://github.com/dcodeIO/node.js-closure-compiler-externs),
+which includes externs for all of node's core modules. As a result, specifiying `--externs=node` automatically includes
+all node.js specific externs in your compile step. If you are using non-core modules, you may still need
+[additional externs](https://github.com/dcodeIO/node.js-closure-compiler-externs/tree/master/contrib) for these. 
+
 Documentation
 -------------
 * [View documentation](http://htmlpreview.github.com/?http://github.com/dcodeIO/ClosureCompiler.js/master/docs/ClosureCompiler.html)

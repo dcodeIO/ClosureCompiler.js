@@ -42,7 +42,7 @@ var jreUrl = "http://bundled-openjdk-jre.googlecode.com/files/OpenJDK-JRE-7u6_24
 // Temporary file for the download
 var jreTempFile = path.normalize(__dirname+path.sep+".."+path.sep+"jre"+path.sep+"jre.tar.gz");
 
-console.log("  Downloading Closure Compiler ...");
+console.log("  Downloading "+ccUrl+" ...");
 var lastBytes = 0, currentBytes = 0, mb = 1024*1024;
 download(ccUrl, ccTempFile, function(error, bytes) {
     if (error) {

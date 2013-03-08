@@ -169,6 +169,12 @@
         var externs = [];
         var j, stat;
         for (i=0; i<options.externs.length; i++) {
+            if (typeof options.externs[i] != 'string' || options.externs[i] == "") {
+                throw(new Error("Externs directive does not point to a file or directory: "+options.externs[i]));
+            }
+            if (options.externs[i].toLowerCase() == "node") {
+                options.externs[i] = __dirname+"/node_modules/closurecompiler-externs";
+            }
             stat = fs.statSync(options.externs[i]);
             if (stat.isDirectory()) {
                 // Use all files in that directory
