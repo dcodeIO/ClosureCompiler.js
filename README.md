@@ -1,4 +1,4 @@
-ClosureCompiler.js - Closure Compiler for node.js [![Build Status](https://travis-ci.org/dcodeIO/ClosureCompiler.js.png?branch=master)](https://travis-ci.org/dcodeIO/ClosureCompiler.js)
+![ClosureCompiler.js - Closure Compiler for node.js](https://raw.github.com/dcodeIO/ClosureCompiler.js/master/ClosureCompiler.png)
 =================================================
 
 The all-round carefree package. Automatically downloads and sets up [Closure Compiler](https://developers.google.com/closure/compiler/)
@@ -74,7 +74,7 @@ Documentation
 -------------
 * [View documentation](http://htmlpreview.github.com/?http://github.com/dcodeIO/ClosureCompiler.js/master/docs/ClosureCompiler.html)
 
-Tests
+Tests [![Build Status](https://travis-ci.org/dcodeIO/ClosureCompiler.js.png?branch=master)](https://travis-ci.org/dcodeIO/ClosureCompiler.js)
 -----
 * [View source](https://github.com/dcodeIO/ClosureCompiler.js/blob/master/tests/test.js)
 * [View report](https://travis-ci.org/dcodeIO/ClosureCompiler.js)
