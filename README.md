@@ -81,6 +81,10 @@ Updating
 To update ClosureCompiler.js and/or the underlying Closure Compiler package, just run `npm update`. This will
 automatically download and set up the latest version of Closure Compiler to be used by ClosureCompiler.js.
 
+#### Using custom Closure Compiler builds ####
+If you want to use a custom Closure Compiler build for whatever reason, just replace the files in the `compiler/`
+directory.
+
 Documentation
 -------------
 * [View documentation](http://htmlpreview.github.com/?http://github.com/dcodeIO/ClosureCompiler.js/master/docs/ClosureCompiler.html)
