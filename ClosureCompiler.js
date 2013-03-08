@@ -32,7 +32,7 @@
     
     /**
      * Constructs a new ClosureCompiler.
-     * @exports ClosureCompiler
+     * @exports ClosureCompiler.
      * @class Bindings for Closure Compiler.
      * @constructor
      */
@@ -126,7 +126,8 @@
      * @param {Object.<string,*|Array>} options Any options Closure Compiler supports. If an option can occur
      *  multiple times, simply supply an array. Externs can additionally point to a directory to include all *.js files 
      *  in it.
-     * @param {function(Error,string)} callback Callback called with the error, if any, and the compiled code
+     * @param {function((Error|string),string)} callback Callback called with the error, if any, and the compiled code.
+     *  If no error occurred, error contains the string output from stderr besides the result.
      * @throws {Error} If the file cannot be compiled
      * @expose
      */
@@ -223,12 +224,10 @@
         // Run it     
         function run(java, args) {
             exec('"'+java+'" '+args, function(error, stdout, stderr) {
-                if (stderr.length > 0) {
-                    callback(new Error(""+stderr), null)
-                } else if (error) {
-                    callback(error, null);
+                if (stdout.length > 0 || stderr.length > 0) { // If we get output, error basically just contains a copy of stderr
+                    callback(stderr+"", stdout+"");
                 } else {
-                    callback(null, ""+stdout);
+                    callback(error, null);
                 }
             });
         }
