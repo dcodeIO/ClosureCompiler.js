@@ -76,6 +76,11 @@ which includes externs for all of node's core modules. As a result, specifiying 
 all node.js specific externs in your compile step. If you are using non-core modules, you may still need
 [additional externs](https://github.com/dcodeIO/node.js-closure-compiler-externs/tree/master/contrib) for these. 
 
+Updating
+--------
+To update ClosureCompiler.js and/or the underlying Closure Compiler package, just run `npm update`. This will
+automatically download and set up the latest version of Closure Compiler to be used by ClosureCompiler.js.
+
 Documentation
 -------------
 * [View documentation](http://htmlpreview.github.com/?http://github.com/dcodeIO/ClosureCompiler.js/master/docs/ClosureCompiler.html)
