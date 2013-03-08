@@ -70,12 +70,25 @@ Externs for `ADVANCED_OPTIMIZATIONS`
 
 *-- „Be a hero!“*
 
-License (ClosureCompiler.js and Closure Compiler itself)
---------------------------------------------------------
+Documentation
+-------------
+* [View documentation](http://htmlpreview.github.com/?http://github.com/dcodeIO/ClosureCompiler.js/master/docs/ClosureCompiler.html)
+
+Tests
+-----
+* [View source](https://github.com/dcodeIO/ClosureCompiler.js/blob/master/tests/test.js)
+* [View report](https://travis-ci.org/dcodeIO/ClosureCompiler.js)
+
+License
+-------
+
+#### ClosureCompiler.js and Closure Compiler itself ####
 Apache License, Version 2.0 - http://www.apache.org/licenses/LICENSE-2.0.html
 
-License (JRE)
--------------
+#### Rhino ####
+MPL 2.0 License - https://developer.mozilla.org/en-US/docs/Rhino/License
+
+#### Bundled JRE ####
 Binary License for OpenJDK - http://openjdk.java.net/legal/binary-license-2007-05-08.html
 
-This package is not officially supported by Google or Oracle. All rights belong to their respective owners.
+This package is not officially supported by Google, Mozilla or Oracle. All rights belong to their respective owners.
