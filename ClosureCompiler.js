@@ -31,12 +31,19 @@
         child_process = require("child_process");
     
     /**
-     * Constructs a new ClosureCompiler.
-     * @exports ClosureCompiler.
-     * @class Bindings for Closure Compiler.
+     * Constructs a new ClosureCompiler instance.
+     * @exports ClosureCompiler
+     * @class Closure Compiler binding.
+     * @param {Object.<string,*>=} options Compilation options
      * @constructor
      */
-    var ClosureCompiler = function() {
+    var ClosureCompiler = function(options) {
+
+        /**
+         * Compilation options.
+         * @type {Object.<string, *>}
+         */
+        this.options = typeof options == 'object' ? options : {};
     };
 
     /**
@@ -107,7 +114,7 @@
     };
 
     /**
-     * Compiles one or more scripts through a new instance of Closure Compiler.
+     * Compiles one or more scripts through a new instance of ClosureCompiler.
      * @param {string|Array.<string>} files File or an array of files to compile
      * @param {Object.<string,*|Array>} options Any options Closure Compiler supports. If an option can occur
      *  multiple times, simply supply an array. Externs can additionally point to a directory to include all *.js files
@@ -117,30 +124,25 @@
      * @expose
      */
     ClosureCompiler.compile = function(files, options, callback) {
-        new ClosureCompiler().compile(files, options, callback);
+        new ClosureCompiler(options).compile(files, callback);
     };
 
     /**
-     * Compiles one or more scripts through this instance of Closure Compiler.
+     * Compiles one or more scripts through this instance of ClosureCompiler.
      * @param {string|Array.<string>} files File or an array of files to compile
-     * @param {Object.<string,*|Array>} options Any options Closure Compiler supports. If an option can occur
-     *  multiple times, simply supply an array. Externs can additionally point to a directory to include all *.js files 
-     *  in it.
      * @param {function((Error|string),string)} callback Callback called with the error, if any, and the compiled code.
      *  If no error occurred, error contains the string output from stderr besides the result.
      * @throws {Error} If the file cannot be compiled
      * @expose
      */
-    ClosureCompiler.prototype.compile = function(files, options, callback) {
-        options = options || {};
+    ClosureCompiler.prototype.compile = function(files, callback) {
 
         // Convert all option keys to lower case
-        var temp = {};
-        var keys = Object.keys(options);
+        var options = {};
+        var keys = Object.keys(this.options);
         for (var i=0; i<keys.length; i++) {
-            temp[keys[i].toLowerCase()] = options[keys[i]];
+            options[keys[i].toLowerCase()] = this.options[keys[i]];
         }
-        options = temp;
         delete options["js"];
         delete options["js_output_file"];
         

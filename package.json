@@ -1,11 +1,8 @@
 {
     "name": "closurecompiler",
-    "version": "1.0.7",
+    "version": "1.1.0",
     "author": "Daniel Wirtz <dcode@dcode.io>",
     "description": "Closure Compiler for node.js",
-    "contributors": [
-        { "name": "Daniel Wirtz", "email": "dcode@dcode.io" }
-    ],
     "main": "ClosureCompiler.js",
     "bin": {
         "ccjs": "./bin/ccjs"
@@ -14,7 +11,9 @@
         "type": "git",
         "url": "https://github.com/dcodeIO/ClosureCompiler.js.git"
     },
-    "bugs": "https://github.com/dcodeIO/ClosureCompiler.js/issues",
+    "bugs": {
+        "url": "https://github.com/dcodeIO/ClosureCompiler.js/issues"
+    },
     "keywords": ["closure compiler", "closure", "compiler", "util", "utility"],
     "dependencies": {
         "tar": "*",

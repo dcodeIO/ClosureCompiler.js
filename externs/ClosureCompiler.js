@@ -64,12 +64,16 @@ ClosureCompiler.testJava = function(java, callback) {};
 ClosureCompiler.compile = function(files, options, callback) {};
 
 /**
+ * @type {Object.<string,*>}
+ */
+ClosureCompiler.prototype.options;
+
+/**
  * @param {string|Array.<string>} files
- * @param {Object.<string,*|Array>} options
  * @param {function(Error,string)} callback
  * @throws {Error}
  */
-ClosureCompiler.prototype.compile = function(files, options, callback) {};
+ClosureCompiler.prototype.compile = function(files, callback) {};
 
 /**
  * @return {string}
