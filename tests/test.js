@@ -1,9 +1,11 @@
-var ClosureCompiler = require(__dirname+"/../ClosureCompiler.min.js");
-
-ClosureCompiler.compile(__filename, {}, function(error, result) {
-    if (error) {
-        throw(error);
+module.exports = {
+    
+    "Gruntfile.min.js": function(test) {
+        var fs = require("fs");
+        test.doesNotThrow(function() {
+            var source = fs.readFileSync(__dirname+"/../Gruntfile.min.js");
+        });
+        test.done();
     }
-    console.log("✔ Compile: "+result);
-    process.exit(0);
-});
+    
+};
