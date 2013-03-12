@@ -1,6 +1,5 @@
 node_modules
 npm-debug.log
-backup/
 compiler/compiler.tar.gz
 compiler/compiler.jar
 jre/jre.tar.gz
@@ -8,3 +7,4 @@ jre/bin_windows
 jre/bin_linux
 jre/bin/mac
 jre/lib
+backup/
