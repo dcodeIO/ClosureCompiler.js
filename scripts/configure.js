@@ -89,7 +89,7 @@ function configure_jre() {
     
     // Test if there is already a global Java so we don't need to download anything
     ClosureCompiler.testJava(ClosureCompiler.getGlobalJava(), function(ok) {
-        if (false && ok) {
+        if (ok) {
             console.log("  ✔ Global Java is available, perfect!\n");
             // Travis CI for example has one, so we save their bandwidth. And Google's. And yours. And...
             finish();
