@@ -36,18 +36,21 @@ var ccUrl = "http://closure-compiler.googlecode.com/files/compiler-latest.tar.gz
 // Temporary file for the download
 var ccTempFile = path.normalize(__dirname+path.sep+".."+path.sep+"compiler"+path.sep+"compiler.tar.gz");
 
+// Gets the platform postfix for downloads
+function platformPostfix() {
+    if (/^win/.test(process.platform)) {
+        return process.arch == 'x64' ? 'win64' : 'win32';
+    } else if (/^darwin/.test(process.platform)) {
+        return 'osx64';
+    }
+    // This might not be ideal, but we don't have anything else and there is always a chance that it will work
+    return process.arch == 'x64' ? 'linux64' : 'linux32';
+}
+
 // Bundled JRE download url
 var jrePrefix = "http://bundled-openjdk-jre.googlecode.com/files/OpenJDK-JRE-7u6_24-";
 var jrePostfix = ".tar.gz";
-var jreUrl = jrePrefix;
-if (/^win/.test(process.platform)) {
-    jreUrl += process.arch == 'x64' ? 'win64' : 'win32'; 
-} else if (/^darwin/.test(process.platform)) {
-    jreUrl += 'osx64';
-} else {
-    jreUrl += process.arch == 'x64' ? 'linux64' : 'linux32';
-}
-jreUrl += jrePostfix;
+var jreUrl = jrePrefix+platformPostfix()+jrePostfix;
 
 // Temporary file for the download
 var jreTempFile = path.normalize(__dirname+path.sep+".."+path.sep+"jre"+path.sep+"jre.tar.gz");
@@ -89,7 +92,7 @@ function configure_jre() {
     
     // Test if there is already a global Java so we don't need to download anything
     ClosureCompiler.testJava(ClosureCompiler.getGlobalJava(), function(ok) {
-        if (ok) {
+        if (false && ok) {
             console.log("  ✔ Global Java is available, perfect!\n");
             // Travis CI for example has one, so we save their bandwidth. And Google's. And yours. And...
             finish();
@@ -184,7 +187,27 @@ function unpack(filename, callback, entryCallback) {
     var input = fs.createReadStream(filename, { flags: 'r', encoding: null }),
         files = {},
         dir = path.dirname(filename),
-        returned = false;
+        returned = false,
+        to = null;
+    
+    // Finishs the unpack if all files are done
+    function maybeFinish() {
+        if (to !== null) clearTimeout(to);
+        to = setTimeout(function() {
+            var alldone = true;
+            var names = Object.keys(files);
+            for (var i=0; i<names.length; i++) {
+                if (!files[names[i]]["done"]) {
+                    alldone = false;
+                    break;
+                }
+            }
+            if (alldone && !returned) {
+                returned = true;
+                callback(null);
+            }
+        }, 1000);
+    }
     
     input.pipe(zlib.createGunzip()).pipe(tar.Parse()).on("entry", function(entry) {
         if (entryCallback) entryCallback(entry);
@@ -194,18 +217,7 @@ function unpack(filename, callback, entryCallback) {
             entry.on("end", function() {
                 files[entry["path"]].end();
                 files[entry["path"]]["done"] = true;
-                var alldone = true;
-                var names = Object.keys(files);
-                for (var i=0; i<names.length; i++) {
-                    if (!files[names[i]]["done"]) {
-                        alldone = false;
-                        break;
-                    }
-                }
-                if (alldone && !returned) {
-                    returned = true;
-                    callback(null);
-                }
+                maybeFinish();
             });
         } else if (entry["type"] == "Directory") {
             try {
@@ -232,7 +244,7 @@ function unpack(filename, callback, entryCallback) {
  */
 function configure() {
     var java = path.normalize(__dirname+path.sep+".."+path.sep+"jre"+path.sep+"bin")+path.sep+"java"+ClosureCompiler.JAVA_EXT;
-    console.log("  Configuring bundled JRE for platform '"+process.platform+"' ...");
+    console.log("  Configuring bundled JRE for platform '"+platformPostfix()+"' ...");
     if (!/^win/.test(process.platform)) {
         var jre = path.normalize(__dirname+path.sep+".."+path.sep+"jre");
         console.log("  | 0755 "+jre);
@@ -241,8 +253,10 @@ function configure() {
         fs.chmodSync(jre+path.sep+"bin", 0755);
         console.log("  | 0755 "+java);
         fs.chmodSync(java, 0755);
+        console.log("  Complete.\n");
+    } else {
+        console.log("  Complete (not necessary).\n");
     }
-    console.log("  Complete.\n");
 }
 
 /**

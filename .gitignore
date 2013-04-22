@@ -3,8 +3,6 @@ npm-debug.log
 compiler/compiler.tar.gz
 compiler/compiler.jar
 jre/jre.tar.gz
-jre/bin_windows
-jre/bin_linux
-jre/bin_mac
+jre/bin
 jre/lib
 backup/
