@@ -37,7 +37,17 @@ var ccUrl = "http://closure-compiler.googlecode.com/files/compiler-latest.tar.gz
 var ccTempFile = path.normalize(__dirname+path.sep+".."+path.sep+"compiler"+path.sep+"compiler.tar.gz");
 
 // Bundled JRE download url
-var jreUrl = "http://bundled-openjdk-jre.googlecode.com/files/OpenJDK-JRE-7u6_24.tar.gz";
+var jrePrefix = "http://bundled-openjdk-jre.googlecode.com/files/OpenJDK-JRE-7u6_24-";
+var jrePostfix = ".tar.gz";
+var jreUrl = jrePrefix;
+if (/^win/.test(process.platform)) {
+    jreUrl += process.arch == 'x64' ? 'win64' : 'win32'; 
+} else if (/^darwin/.test(process.platform)) {
+    jreUrl += 'osx64';
+} else {
+    jreUrl += process.arch == 'x64' ? 'linux64' : 'linux32';
+}
+jreUrl += jrePostfix;
 
 // Temporary file for the download
 var jreTempFile = path.normalize(__dirname+path.sep+".."+path.sep+"jre"+path.sep+"jre.tar.gz");
@@ -79,14 +89,14 @@ function configure_jre() {
     
     // Test if there is already a global Java so we don't need to download anything
     ClosureCompiler.testJava(ClosureCompiler.getGlobalJava(), function(ok) {
-        if (ok) {
+        if (false && ok) {
             console.log("  ✔ Global Java is available, perfect!\n");
             // Travis CI for example has one, so we save their bandwidth. And Google's. And yours. And...
             finish();
         } else {
             if (fs.existsSync(__dirname+path.sep+".."+path.sep+"jre"+path.sep+"bin")) {
                 console.log("  ✖ Global Java not found, so let's test our bundled one ...\n");
-                runTest();
+                runTest(true);
             } else {
                 console.log("  ✖ Global Java not found, we need to download the bundled JRE ...");
                 console.log("    Downloading "+jreUrl+" ...");
@@ -107,7 +117,7 @@ function configure_jre() {
                         require("sleep").sleep(1); // Let the entry callbacks finish
                         console.log("      ✔ Unpack complete.\n");
                         configure();
-                        runTest();
+                        runTest(true);
                     }, function(entry) {
                         console.log("      | "+entry["path"]);
                     });
@@ -221,49 +231,41 @@ function unpack(filename, callback, entryCallback) {
  * Configures our bundled Java.
  */
 function configure() {
-    // Basically: Rename the platform's bin_* directory to bin and set necessary file permissions
-    var to = path.normalize(__dirname+path.sep+".."+path.sep+"jre"+path.sep+"bin");
-    var java = to+path.sep+"java"+ClosureCompiler.JAVA_EXT;
+    var java = path.normalize(__dirname+path.sep+".."+path.sep+"jre"+path.sep+"bin")+path.sep+"java"+ClosureCompiler.JAVA_EXT;
     console.log("  Configuring bundled JRE for platform '"+process.platform+"' ...");
-    if (fs.existsSync(__dirname+"/../jre/bin")) {
-        console.log("  ✔ Bundled JRE is already configured.\n");
-    } else {
+    if (!/^win/.test(process.platform)) {
         var jre = path.normalize(__dirname+path.sep+".."+path.sep+"jre");
         console.log("  | 0755 "+jre);
         fs.chmodSync(jre, 0755);
-        var dirname;
-        if ((/^win/i).test(process.platform)) {
-            dirname = "bin_windows";
-        } else if ((/^darwin/i).test(process.platform)) {
-            dirname = "bin_mac";
-        } else {
-            dirname = "bin_linux";
-        }
-        var from = path.normalize(__dirname+path.sep+".."+path.sep+"jre"+path.sep+dirname);
-        fs.chmodSync(from, 0755);
-        console.log("  | "+from+" -> "+to+"");
-        fs.renameSync(from, to);
+        console.log("  | 0755 "+jre+path.sep+"bin");
+        fs.chmodSync(jre+path.sep+"bin", 0755);
         console.log("  | 0755 "+java);
         fs.chmodSync(java, 0755);
-        console.log("  Complete.\n");
     }
-
+    console.log("  Complete.\n");
 }
 
 /**
  * Runs the final test.
+ * @param {boolean=} ensureBundled
  */
-function runTest() {
+function runTest(ensureBundled) {
     console.log("  Testing bundled Java ...");
     console.log("  | exec "+ClosureCompiler.getBundledJava());
-    ClosureCompiler.testJava(ClosureCompiler.getBundledJava(), function(ok) {
+    ClosureCompiler.testJava(ClosureCompiler.getBundledJava(), function(ok, err) {
         if (ok) {
             console.log("  ✔ Successfully called bundled Java!\n");
             finish();
         } else {
-            console.log("  ✖ Failed to call bundled java, trying global java instead ...");
+            if (ensureBundled) {
+                console.log("  ✖ Failed to call bundled java:");
+                console.log("-----\n"+err+"\n-----");
+                console.log("  ✖ Trying global java instead ...");
+            } else {
+                console.log("  ✖ Failed to call bundled java, trying global java instead ...");
+            }
             console.log("    | exec "+ClosureCompiler.getGlobalJava()+"\n");
-            ClosureCompiler.testJava(ClosureCompiler.getGlobalJava(), function(ok) {
+            ClosureCompiler.testJava(ClosureCompiler.getGlobalJava(), function(ok, err) {
                 if (ok) {
                     console.log("    ✔ Successfully called global Java!\n");
                     finish();

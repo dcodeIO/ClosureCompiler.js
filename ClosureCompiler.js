@@ -44,6 +44,11 @@
          * @type {Object.<string, *>}
          */
         this.options = typeof options == 'object' ? options : {};
+        try {
+            Object.keys(this.options);
+        } catch (e) {
+            this.options = {};
+        }
     };
 
     /**
@@ -100,15 +105,15 @@
     /**
      * Tests if java is callable.
      * @param {string} java Path to java
-     * @param {function(boolean)} callback Callback function
+     * @param {function(boolean, Error)} callback Callback function
      * @expose
      */
     ClosureCompiler.testJava = function(java, callback) {
         child_process.exec('"'+java+'" -version', {}, function(error, stdout, stderr) {
             if ((""+stderr).indexOf("version \"") >= 0) {
-                callback(true);
+                callback(true, null);
             } else {
-                callback(false);
+                callback(false, error);
             }
         });
     };
