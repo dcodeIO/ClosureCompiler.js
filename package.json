@@ -1,8 +1,11 @@
 {
     "name": "closurecompiler",
-    "version": "1.1.1",
-    "author": "Daniel Wirtz <dcode@dcode.io>",
+    "version": "1.1.2",
     "description": "ClosureCompiler.js: Closure Compiler for node.js. The all-round carefree package.",
+    "author": "Daniel Wirtz <dcode@dcode.io>",
+    "contributors": [
+        "Feross Aboukhadijeh <feross@feross.org>"
+    ],
     "main": "ClosureCompiler.js",
     "bin": {
         "ccjs": "./bin/ccjs"

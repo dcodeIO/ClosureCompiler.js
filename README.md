@@ -99,6 +99,10 @@ Tests [![Build Status](https://travis-ci.org/dcodeIO/ClosureCompiler.js.png?bran
 * [View source](https://github.com/dcodeIO/ClosureCompiler.js/blob/master/tests/test.js)
 * [View report](https://travis-ci.org/dcodeIO/ClosureCompiler.js)
 
+Contributors
+------------
+Feross Aboukhadijeh
+
 License
 -------
 
