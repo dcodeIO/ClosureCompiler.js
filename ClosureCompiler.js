@@ -221,10 +221,10 @@
                     value = [value];
                 }
                 for (j=0; j<value.length; j++) {
-                    if (!/[^\s]*/.test(value)) {
-                        throw(new Error("Illegal value for option "+key+": "+value));
+                    if (!/[^\s]*/.test(value[j])) {
+                        throw(new Error("Illegal value for option "+key+": "+value[j]));
                     }
-                    args += ' --'+key+' '+value;
+                    args += ' --'+key+' '+value[j];
                 }
             }
         }
