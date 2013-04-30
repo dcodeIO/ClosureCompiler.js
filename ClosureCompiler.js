@@ -151,7 +151,7 @@
         delete options["js"];
         delete options["js_output_file"];
         
-        var args = '-jar "'+__dirname+'/compiler/compiler.jar"';
+        var args = '-client -d32 -jar "'+__dirname+'/compiler/compiler.jar"';
         
         // Source files
         if (!(files instanceof Array)) {
