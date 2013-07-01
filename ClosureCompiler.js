@@ -247,17 +247,24 @@
             });
         }
         
-        // Try global java first
-        ClosureCompiler.testJava(ClosureCompiler.getGlobalJava(), function(ok) {
+        // Try just `java`
+        ClosureCompiler.testJava("java", function(ok) {
             if (ok) {
-                run(ClosureCompiler.getGlobalJava(), args);
+                run("java", args);
             } else {
-                // If there is no global java, try the bundled one
-                ClosureCompiler.testJava(ClosureCompiler.getBundledJava(), function(ok) {
+                // Try any other global java
+                ClosureCompiler.testJava(ClosureCompiler.getGlobalJava(), function(ok) {
                     if (ok) {
-                        run(ClosureCompiler.getBundledJava(), args);
+                        run(ClosureCompiler.getGlobalJava(), args);
                     } else {
-                        throw(new Error("Java is not available, neither the bundled nor a global one."));
+                        // If there is no global java, try the bundled one
+                        ClosureCompiler.testJava(ClosureCompiler.getBundledJava(), function(ok) {
+                            if (ok) {
+                                run(ClosureCompiler.getBundledJava(), args);
+                            } else {
+                                throw(new Error("Java is not available, neither the bundled nor a global one."));
+                            }
+                        });
                     }
                 });
             }
