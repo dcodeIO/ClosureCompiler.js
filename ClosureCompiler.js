@@ -153,7 +153,7 @@
         delete options["js"];
         delete options["js_output_file"];
         
-        var args = '-client -d32 -jar "'+__dirname+'/compiler/compiler.jar"';
+        var args = '-client -jar "'+__dirname+'/compiler/compiler.jar"'; // -d32 does not work on 64bit
         
         // Source files
         if (!(files instanceof Array)) {
@@ -247,24 +247,17 @@
             });
         }
         
-        // Try just `java`
-        ClosureCompiler.testJava("java", function(ok) {
+        // Try any other global java
+        ClosureCompiler.testJava(ClosureCompiler.getGlobalJava(), function(ok) {
             if (ok) {
-                run("java", args);
+                run(ClosureCompiler.getGlobalJava(), args);
             } else {
-                // Try any other global java
-                ClosureCompiler.testJava(ClosureCompiler.getGlobalJava(), function(ok) {
+                // If there is no global java, try the bundled one
+                ClosureCompiler.testJava(ClosureCompiler.getBundledJava(), function(ok) {
                     if (ok) {
-                        run(ClosureCompiler.getGlobalJava(), args);
+                        run(ClosureCompiler.getBundledJava(), args);
                     } else {
-                        // If there is no global java, try the bundled one
-                        ClosureCompiler.testJava(ClosureCompiler.getBundledJava(), function(ok) {
-                            if (ok) {
-                                run(ClosureCompiler.getBundledJava(), args);
-                            } else {
-                                throw(new Error("Java is not available, neither the bundled nor a global one."));
-                            }
-                        });
+                        throw(new Error("Java is not available, neither the bundled nor a global one."));
                     }
                 });
             }
