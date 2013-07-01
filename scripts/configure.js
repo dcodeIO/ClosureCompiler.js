@@ -55,6 +55,8 @@ var jreUrl = jrePrefix+platformPostfix()+jrePostfix;
 // Temporary file for the download
 var jreTempFile = path.normalize(__dirname+path.sep+".."+path.sep+"jre"+path.sep+"jre.tar.gz");
 
+if (!fs.existsSync) fs.existsSync = path.existsSync; // node < 0.8
+
 console.log("  Downloading "+ccUrl+" ...");
 var lastBytes = 0, currentBytes = 0, mb = 1024*1024;
 download(ccUrl, ccTempFile, function(error, bytes) {

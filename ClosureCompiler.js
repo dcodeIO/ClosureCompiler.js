@@ -29,6 +29,8 @@
     var path = require("path"),
         fs = require("fs"),
         child_process = require("child_process");
+
+    if (!fs.existsSync) fs.existsSync = path.existsSync; // node < 0.8
     
     /**
      * Constructs a new ClosureCompiler instance.
