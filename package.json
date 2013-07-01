@@ -29,8 +29,8 @@
     },
     "preferGlobal": true,
     "scripts": {
-        "postinstall": "npm run-script configure",
-        "postupdate": "npm run-script configure",
+        "install": "npm run-script configure",
+        "update": "npm run-script configure",
         "test": "node tests/test.js",
         
         "configure": "node scripts/configure.js",
