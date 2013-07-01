@@ -34,7 +34,7 @@ console.log("Configuring ClosureCompiler.js "+pkg.version+" ...\n");
 var ccUrl = "http://closure-compiler.googlecode.com/files/compiler-latest.tar.gz";
 
 // Temporary file for the download
-var ccTempFile = path.normalize(__dirname+path.sep+".."+path.sep+"compiler"+path.sep+"compiler.tar.gz");
+var ccTempFile = path.normalize(path.join(__dirname, "..", "compiler", "compiler.tar.gz"));
 
 // Gets the platform postfix for downloads
 function platformPostfix() {
@@ -53,7 +53,7 @@ var jrePostfix = ".tar.gz";
 var jreUrl = jrePrefix+platformPostfix()+jrePostfix;
 
 // Temporary file for the download
-var jreTempFile = path.normalize(__dirname+path.sep+".."+path.sep+"jre"+path.sep+"jre.tar.gz");
+var jreTempFile = path.normalize(path.join(__dirname, "..", "jre", "jre.tar.gz"));
 
 if (!fs.existsSync) fs.existsSync = path.existsSync; // node < 0.8
 
@@ -99,7 +99,7 @@ function configure_jre() {
             // Travis CI for example has one, so we save their bandwidth. And Google's. And yours. And...
             finish();
         } else {
-            if (fs.existsSync(__dirname+path.sep+".."+path.sep+"jre"+path.sep+"bin")) {
+            if (fs.existsSync(path.join(__dirname, "..", "jre", "bin"))) {
                 console.log("  ✖ Global Java not found, so let's test our bundled one ...\n");
                 runTest(true);
             } else {
@@ -214,7 +214,7 @@ function unpack(filename, callback, entryCallback) {
     input.pipe(zlib.createGunzip()).pipe(tar.Parse()).on("entry", function(entry) {
         if (entryCallback) entryCallback(entry);
         if (entry["type"] == 'File') {
-            files[entry["path"]] = fs.createWriteStream(dir+path.sep+entry["path"], { flags: 'w', encoding: null });
+            files[entry["path"]] = fs.createWriteStream(path.join(dir, entry["path"]), { flags: 'w', encoding: null });
             entry.pipe(files[entry["path"]]);
             entry.on("end", function() {
                 files[entry["path"]].end();
@@ -223,9 +223,9 @@ function unpack(filename, callback, entryCallback) {
             });
         } else if (entry["type"] == "Directory") {
             try {
-                fs.mkdirSync(dir+path.sep+entry["path"]);
+                fs.mkdirSync(path.join(dir, entry["path"]));
             } catch (e) {
-                if (!fs.existsSync(dir+path.sep+entry["path"])) {
+                if (!fs.existsSync(path.join(dir, entry["path"]))) {
                     if (!returned) {
                         returned = true;
                         callback(e);
@@ -245,14 +245,14 @@ function unpack(filename, callback, entryCallback) {
  * Configures our bundled Java.
  */
 function configure() {
-    var java = path.normalize(__dirname+path.sep+".."+path.sep+"jre"+path.sep+"bin")+path.sep+"java"+ClosureCompiler.JAVA_EXT;
+    var java = path.normalize(path.join(__dirname, "..", "jre", "bin", "java"+ClosureCompiler.JAVA_EXT));
     console.log("  Configuring bundled JRE for platform '"+platformPostfix()+"' ...");
     if (!/^win/.test(process.platform)) {
-        var jre = path.normalize(__dirname+path.sep+".."+path.sep+"jre");
+        var jre = path.normalize(path.join(__dirname, "..", "jre"));
         console.log("  | 0755 "+jre);
         fs.chmodSync(jre, 0755);
-        console.log("  | 0755 "+jre+path.sep+"bin");
-        fs.chmodSync(jre+path.sep+"bin", 0755);
+        console.log("  | 0755 "+path.join(jre, "bin"));
+        fs.chmodSync(path.join(jre, "bin"), 0755);
         console.log("  | 0755 "+java);
         fs.chmodSync(java, 0755);
         console.log("  Complete.\n");

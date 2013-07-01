@@ -84,7 +84,7 @@
         var java = null;
         
         if (process.env["JAVA_HOME"]) {
-            java = process.env["JAVA_HOME"]+path.sep+"bin"+path.sep+"java"+ClosureCompiler.JAVA_EXT;
+            java = path.join(process.env["JAVA_HOME"], "bin", "java"+ClosureCompiler.JAVA_EXT);
             if (!fs.existsSync(java)) {
                 java = null;
             }
@@ -101,7 +101,7 @@
      * @expose
      */
     ClosureCompiler.getBundledJava = function() {
-        return path.normalize(__dirname+path.sep+"jre"+path.sep+"bin"+path.sep+"java"+ClosureCompiler.JAVA_EXT);
+        return path.normalize(path.join(__dirname, "jre", "bin", "java"+ClosureCompiler.JAVA_EXT));
     };
 
     /**
