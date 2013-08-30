@@ -23,7 +23,7 @@ The API is quite simple and fully explained in a few lines of code:
 var ClosureCompiler = require("closurecompiler");
 
 ClosureCompiler.compile(
-    ['file1.js', 'file2.js',
+    ['file1.js', 'file2.js'],
     {
         // Options in the API exclude the "--" prefix
         compilation_level: "ADVANCED_OPTIMIZATIONS",
