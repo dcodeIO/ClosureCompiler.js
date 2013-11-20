@@ -1,6 +1,6 @@
 {
     "name": "closurecompiler",
-    "version": "1.1.4",
+    "version": "1.1.5",
     "description": "ClosureCompiler.js: Closure Compiler for node.js. The all-round carefree package.",
     "author": "Daniel Wirtz <dcode@dcode.io>",
     "contributors": [
