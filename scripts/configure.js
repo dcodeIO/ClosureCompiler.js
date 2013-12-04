@@ -65,19 +65,21 @@ download(ccUrl, ccTempFile, function(error, bytes) {
         fail();
     }
     console.log("  ✔ Download complete: "+ccTempFile+" ("+parseInt(bytes/mb, 10)+" mb)\n");
-    require("sleep").sleep(1);
-    console.log("  Unpacking "+ccTempFile+" ...");
-    unpack(ccTempFile, function(error) {
-        if (error) {
-            console.log("  ✖ Unpack failed: "+error+"\n");
-            fail();
-        }
-        require("sleep").sleep(1); // Let the entry callbacks finish
-        console.log("  ✔ Unpack complete.\n");
-        configure_jre();
-    }, function(entry) {
-        console.log("  | "+entry["path"]);
-    });
+    setTimeout(function() {
+        console.log("  Unpacking "+ccTempFile+" ...");
+        unpack(ccTempFile, function(error) {
+            if (error) {
+                console.log("  ✖ Unpack failed: "+error+"\n");
+                fail();
+            }
+            setTimeout(function() { // Let the entry callbacks finish
+                console.log("  ✔ Unpack complete.\n");
+                configure_jre();
+            }, 1000);
+        }, function(entry) {
+            console.log("  | "+entry["path"]);
+        });
+    }, 1000);
 }, function(bytes, total) {
     currentBytes += bytes;
     if (currentBytes == bytes || currentBytes - lastBytes >= mb) {
@@ -114,20 +116,22 @@ function configure_jre() {
                         fail();
                     }
                     console.log("    ✔ Download complete: "+jreTempFile+" ("+parseInt(bytes/mb, 10)+" mb)\n");
-                    require("sleep").sleep(1);
-                    console.log("      Unpacking "+jreTempFile+" ...");
-                    unpack(jreTempFile, function(error) {
-                        if (error) {
-                            console.log("      ✖ Unpack failed: "+error+"\n");
-                            fail();
-                        }
-                        require("sleep").sleep(1); // Let the entry callbacks finish
-                        console.log("      ✔ Unpack complete.\n");
-                        configure();
-                        runTest(true);
-                    }, function(entry) {
-                        console.log("      | "+entry["path"]);
-                    });
+                    setTimeout(function() {
+                        console.log("      Unpacking "+jreTempFile+" ...");
+                        unpack(jreTempFile, function(error) {
+                            if (error) {
+                                console.log("      ✖ Unpack failed: "+error+"\n");
+                                fail();
+                            }
+                            setTimeout(function() { // Let the entry callbacks finish
+                                console.log("      ✔ Unpack complete.\n");
+                                configure();
+                                runTest(true);
+                            }, 1000);
+                        }, function(entry) {
+                            console.log("      | "+entry["path"]);
+                        });
+                    }, 1000);
                 }, function(bytes, total) {
                     currentBytes += bytes;
                     if (currentBytes == bytes || currentBytes - lastBytes >= mb) {
