@@ -100,10 +100,10 @@ function configure_jre() {
             finish();
         } else {
             if (fs.existsSync(path.join(__dirname, "..", "jre", "bin"))) {
-                console.log("  ✖ Global Java not found, so let's test our bundled one ...\n");
+                console.log("  ✖ Global Java not found or outdated, testing bundled JRE ...\n");
                 runTest(true);
             } else {
-                console.log("  ✖ Global Java not found, we need to download the bundled JRE ...");
+                console.log("  ✖ Global Java not found or outdated, downloading bundled JRE ...");
                 console.log("    Downloading "+jreUrl+" ...");
                 lastBytes = 0; currentBytes = 0;
                 download(jreUrl, jreTempFile, function(error, bytes) {

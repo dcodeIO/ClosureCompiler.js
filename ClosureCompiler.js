@@ -112,8 +112,11 @@
      */
     ClosureCompiler.testJava = function(java, callback) {
         child_process.exec('"'+java+'" -version', {}, function(error, stdout, stderr) {
-            if ((""+stderr).indexOf("version \"") >= 0) {
+            stderr += "";
+            if (stderr.indexOf("version \"1.7.") >= 0) {
                 callback(true, null);
+            } else if (stderr.indexOf("version \"") >= 0) {
+                callback(false, new Error("Not Java 7"));
             } else {
                 callback(false, error);
             }
