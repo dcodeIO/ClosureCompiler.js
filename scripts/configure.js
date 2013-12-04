@@ -91,7 +91,9 @@ download(ccUrl, ccTempFile, function(error, bytes) {
  */
 function configure_jre() {
     console.log("  Configuring JRE ...");
-    
+
+    var mb = 1024*1024;
+
     // Test if there is already a global Java so we don't need to download anything
     ClosureCompiler.testJava(ClosureCompiler.getGlobalJava(), function(ok) {
         if (ok) {
@@ -318,5 +320,5 @@ function fail() {
  */
 function finish() {
     cleanUp();
-    console.log("  ✔ ClosureCompiler.js has successfully been configured. Have fun!\n");
+    console.log("  ✔ ClosureCompiler.js has successfully been configured!\n");
 }
