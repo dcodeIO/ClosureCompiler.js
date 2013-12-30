@@ -62,9 +62,10 @@ The API and `ccjs` support all the command line options of Closure Compiler exce
 
 * [See the output of ccjs --help](https://github.com/dcodeIO/ClosureCompiler.js/blob/master/OPTIONS.md).
 
-Usage with Grunt
+Usage with Grunt and Gulp
 ----------------
-To simply include ClosureCompiler.js as a [Grunt](http://gruntjs.com/) task, see: [grunt-closurecompiler](https://github.com/dcodeIO/grunt-closurecompiler)
+- [grunt-closurecompiler](https://github.com/dcodeIO/grunt-closurecompiler)
+- [gulp-closure-compiler](https://github.com/sindresorhus/gulp-closure-compiler)
 
 Externs for `ADVANCED_OPTIMIZATIONS`
 ------------------------------------
