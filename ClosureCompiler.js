@@ -156,7 +156,10 @@
         delete options["js"];
         delete options["js_output_file"];
         
-        var args = '-client -jar "'+__dirname+'/compiler/compiler.jar"'; // -d32 does not work on 64bit
+        // -XX:+TieredCompilation speeds up compilation for Java 1.7.
+        // Previous -d32 was for Java 1.6 only.
+        // Compiler now requires Java 1.7 and this flag does not need detection.
+        var args = '-XX:+TieredCompilation -jar "'+__dirname+'/compiler/compiler.jar"';
         
         // Source files
         if (!(files instanceof Array)) {
