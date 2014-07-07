@@ -113,7 +113,7 @@
     ClosureCompiler.testJava = function(java, callback) {
         child_process.exec('"'+java+'" -version', {}, function(error, stdout, stderr) {
             stderr += "";
-            if (stderr.indexOf("version \"1.7.") >= 0) {
+            if (stderr.match(/1\.[7-8]+/)) {
                 callback(true, null);
             } else if (stderr.indexOf("version \"") >= 0) {
                 callback(false, new Error("Not Java 7"));
@@ -156,7 +156,10 @@
         delete options["js"];
         delete options["js_output_file"];
         
-        var args = '-client -jar "'+__dirname+'/compiler/compiler.jar"'; // -d32 does not work on 64bit
+        // -XX:+TieredCompilation speeds up compilation for Java 1.7.
+        // Previous -d32 was for Java 1.6 only.
+        // Compiler now requires Java 1.7 and this flag does not need detection.
+        var args = '-XX:+TieredCompilation -jar "'+__dirname+'/compiler/compiler.jar"';
         
         // Source files
         if (!(files instanceof Array)) {
