@@ -20,13 +20,13 @@
     "keywords": ["closure compiler", "closure", "compiler", "util", "utility"],
     "dependencies": {
         "tar": "*",
-        "closurecompiler-externs": "*"
+        "closurecompiler-externs": "*",
+        "follow-redirects": "0.0.3"
     },
     "license": "Apache License, Version 2.0",
     "engines": {
         "node": ">=0.6"
     },
-    "preferGlobal": true,
     "scripts": {
         "install": "npm run-script configure",
         "update": "npm run-script configure",
@@ -36,5 +36,6 @@
         "make": "npm run-script compile && npm test && npm run-script jsdoc",
         "compile": "node bin/ccjs ClosureCompiler.js --externs=node --compilation_level=ADVANCED_OPTIMIZATIONS > ClosureCompiler.min.js",
         "jsdoc": "jsdoc -c jsdoc.json"
-    }
+    },
+    "preferGlobal": true
 }

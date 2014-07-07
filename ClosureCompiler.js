@@ -239,7 +239,7 @@
             require("child_process").exec(cmd, {maxBuffer: 20*1024*1024}, callback);
         }
 
-        // Run it     
+        // Run it
         function run(java, args) {
             exec('"'+java+'" '+args, function(error, stdout, stderr) {
                 if (stdout.length > 0 || stderr.length > 0) { // If we get output, error basically just contains a copy of stderr

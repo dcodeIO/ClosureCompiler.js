@@ -6,3 +6,4 @@ jre/jre.tar.gz
 jre/bin
 jre/lib
 backup/
+.idea/
