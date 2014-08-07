@@ -155,7 +155,7 @@ function download(downloadUrl, filename, callback, ondata) {
     var url = require("url").parse(downloadUrl);
     var out = require("fs").createWriteStream(filename, { flags: 'w', encoding: null, mode: 0666 });
     var bytes = 0, total = -1;
-    var req = require("follow-redirects").http.request({
+    var req = require(path.join(__dirname, "..", "lib", "follow-redirects.js")).http.request({
         "hostname": url["host"],
         "method": "GET",
         "path": url["path"],
