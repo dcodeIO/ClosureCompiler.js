@@ -6,7 +6,6 @@
         "include": ["ClosureCompiler.js"]
     },
     "opts": {
-        "template": "templates/esoccer",
         "destination": "docs"
     },
     "plugins": ["plugins/markdown"]
