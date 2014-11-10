@@ -45,12 +45,7 @@
          * Compilation options.
          * @type {Object.<string, *>}
          */
-        this.options = typeof options == 'object' ? options : {};
-        try {
-            Object.keys(this.options);
-        } catch (e) {
-            this.options = {};
-        }
+        this.options = typeof options === 'object' && options ? options : {};
     };
 
     /**

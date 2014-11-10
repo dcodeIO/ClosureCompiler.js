@@ -62,6 +62,9 @@ The API and `ccjs` support all the command line options of Closure Compiler exce
 
 * [See the output of ccjs --help](https://github.com/dcodeIO/ClosureCompiler.js/blob/master/OPTIONS.md).
 
+Additionally, the JVM parameters `-Xms` and `-Xmx` are supported just in case that you run out of heap space compiling a
+rather large code base. When omitted, `-Xmx` defaults to `1024m`.
+
 Usage with Grunt and Gulp
 ----------------
 - [grunt-closurecompiler](https://github.com/dcodeIO/grunt-closurecompiler)

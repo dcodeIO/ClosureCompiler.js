@@ -1,6 +1,6 @@
 {
     "name": "closurecompiler",
-    "version": "1.4.0",
+    "version": "1.4.1",
     "description": "ClosureCompiler.js: Closure Compiler for node.js. The all-round carefree package.",
     "author": "Daniel Wirtz <dcode@dcode.io>",
     "contributors": [
@@ -21,7 +21,7 @@
     "dependencies": {
         "tar": "0.1.20",
         "closurecompiler-externs": "*",
-        "jsdoc": "~3.3"
+        "jsdoc": "~3.3.0-alpha10"
     },
     "license": "Apache License, Version 2.0",
     "engines": {
