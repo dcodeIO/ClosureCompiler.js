@@ -28,7 +28,8 @@
     // Dependencies
     var path = require("path"),
         fs = require("fs"),
-        child_process = require("child_process");
+        child_process = require("child_process"),
+        concat = require('concat-stream');
 
     if (!fs.existsSync) fs.existsSync = path.existsSync; // node < 0.8
     
@@ -124,23 +125,33 @@
      * @param {Object.<string,*|Array>} options Any options Closure Compiler supports. If an option can occur
      *  multiple times, simply supply an array. Externs can additionally point to a directory to include all *.js files
      *  in it.
+     * @param {ReadStream} stdin Optional read stream to use as stdin for closure compiler
      * @param {function(Error,string)} callback Callback called with the error, if any, and the compiled code
      * @throws {Error} If the file cannot be compiled
      * @expose
      */
-    ClosureCompiler.compile = function(files, options, callback) {
-        new ClosureCompiler(options).compile(files, callback);
+    ClosureCompiler.compile = function(files, options, stdin, callback) {
+        if (arguments.length < 4) {
+            callback = stdin;
+            stdin = null;
+        }
+        new ClosureCompiler(options).compile(files, stdin, callback);
     };
 
     /**
      * Compiles one or more scripts through this instance of ClosureCompiler.
      * @param {string|Array.<string>} files File or an array of files to compile
+     * @param {ReadStream} stdin Optional read stream to use as stdin for closure compiler
      * @param {function((Error|string),string)} callback Callback called with the error, if any, and the compiled code.
      *  If no error occurred, error contains the string output from stderr besides the result.
      * @throws {Error} If the file cannot be compiled
      * @expose
      */
-    ClosureCompiler.prototype.compile = function(files, callback) {
+    ClosureCompiler.prototype.compile = function(files, stdin, callback) {
+        if (arguments.length < 3) {
+            callback = stdin;
+            stdin = null;
+        }
 
         // Convert all option keys to lower case
         var options = {};
@@ -159,10 +170,12 @@
         // -XX:+TieredCompilation speeds up compilation for Java 1.7.
         // Previous -d32 was for Java 1.6 only.
         // Compiler now requires Java 1.7 and this flag does not need detection.
-        var args = '-XX:+TieredCompilation';
-            if (xms) args += ' -Xms'+xms;
-            args += ' -Xmx'+xmx;
-            args += ' -jar "'+__dirname+'/compiler/compiler.jar"';
+        var args = ['-XX:+TieredCompilation'];
+            if (xms) args.push('-Xms'+xms);
+            args.push(
+                '-Xmx'+xmx,
+                '-jar', __dirname+'/compiler/compiler.jar'
+            );
 
         // Source files
         if (!(files instanceof Array)) {
@@ -176,7 +189,7 @@
             if (!stat.isFile()) {
                 throw(new Error("Source file not found: "+files[i]));
             }
-            args += ' --js "'+files[i]+'"';
+            args.push('--js', files[i]);
         }
         
         // Externs files
@@ -212,7 +225,7 @@
         }
         delete options["externs"];
         for (i=0; i<externs.length; i++) {
-            args += ' --externs "'+externs[i]+'"';
+            args.push('--externs', externs[i]);
         }
         
         // Convert any other options to command line arguments
@@ -224,7 +237,7 @@
                 throw(new Error("Illegal option: "+key));
             }
             if (value === true) { // Only once
-                args += ' --'+key;
+                args.push('--'+key);
             } else if (value === false) {
                 // Skip
             } else { // Multiple times
@@ -235,19 +248,36 @@
                     if (!/[^\s]*/.test(value[j])) {
                         throw(new Error("Illegal value for option "+key+": "+value[j]));
                     }
-                    args += ' --'+key+' '+value[j];
+                    args.push('--'+key, value[j]);
                 }
             }
         }
         
         // Executes a command
-        function exec(cmd, callback) {
-            require("child_process").exec(cmd, {maxBuffer: 20*1024*1024}, callback);
+        function exec(cmd, args, stdin, callback) {
+            var result, stderrOutput;
+            var stdout = concat(function(data) { result = data; });
+            var stderr = concat(function(data) { stderrOutput = data; });
+
+            var process = child_process.spawn(cmd, args, {
+                stdio: [stdin || 'ignore', 'pipe', 'pipe'],
+            });
+            process.stdout.pipe(stdout);
+            process.stderr.pipe(stderr);
+            process.on('exit', function(code, signal) {
+              var err;
+              if (code) {
+                err = new Error(code);
+                err.code = code;
+                err.signal = signal;
+              }
+              callback(err, result, stderrOutput);
+            });
         }
 
         // Run it
         function run(java, args) {
-            exec('"'+java+'" '+args, function(error, stdout, stderr) {
+            exec(java, args, stdin, function(error, stdout, stderr) {
                 if (stdout.length > 0 || stderr.length > 0) { // If we get output, error basically just contains a copy of stderr
                     callback(stderr+"", stdout+"");
                 } else {

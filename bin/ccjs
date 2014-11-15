@@ -77,7 +77,7 @@ for (var i=2; i<process.argv.length; i++) {
 }
 
 // Run it
-ClosureCompiler.compile(files, options, function(error, result) {
+ClosureCompiler.compile(files, options, process.stdin, function(error, result) {
     if (help && typeof error == 'string') {
         error = error.replace(/(\-\-[a-zA-Z0-9_]+) ([^ ])/g, function($, $1, $2) {
             return $1+"="+$2;
