@@ -260,7 +260,7 @@
             var stderr = concat(function(data) { stderrOutput = data; });
 
             var process = child_process.spawn(cmd, args, {
-                stdio: [stdin || 'ignore', 'pipe', 'pipe'],
+                stdio: [stdin || 'ignore', 'pipe', 'pipe']
             });
             process.stdout.pipe(stdout);
             process.stderr.pipe(stderr);
