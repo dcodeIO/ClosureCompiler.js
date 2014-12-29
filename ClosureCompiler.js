@@ -29,7 +29,7 @@
     var path = require("path"),
         fs = require("fs"),
         child_process = require("child_process"),
-        concat = require('concat-stream');
+        concat = require('bl');
 
     if (!fs.existsSync) fs.existsSync = path.existsSync; // node < 0.8
     
@@ -255,9 +255,8 @@
         
         // Executes a command
         function exec(cmd, args, stdin, callback) {
-            var result, stderrOutput;
-            var stdout = concat(function(data) { result = data; });
-            var stderr = concat(function(data) { stderrOutput = data; });
+            var stdout = concat();
+            var stderr = concat();
 
             var process = child_process.spawn(cmd, args, {
                 stdio: [stdin || 'ignore', 'pipe', 'pipe']
@@ -271,7 +270,7 @@
                 err.code = code;
                 err.signal = signal;
               }
-              callback(err, result, stderrOutput);
+              callback(err, stdout, stderr);
             });
         }
 
