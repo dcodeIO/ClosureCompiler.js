@@ -182,14 +182,18 @@
             files = [files];
         }
         for (i=0; i<files.length; i++) {
-            if (typeof files[i] != 'string' || files[i].indexOf('"') >= 0) {
+            if (typeof files[i] != 'string') {
                 throw(new Error("Illegal source file: "+files[i]));
             }
-            stat = fs.statSync(files[i]);
-            if (!stat.isFile()) {
-                throw(new Error("Source file not found: "+files[i]));
+            if (files[i].indexOf('"') >= 0) {
+                args.push('--js=' + files[i]);
+            } else {
+                stat = fs.statSync(files[i]);
+                if (!stat.isFile()) {
+                    throw (new Error("Source file not found: " + files[i]));
+                }
+                args.push('--js', files[i]);
             }
-            args.push('--js', files[i]);
         }
         
         // Externs files
