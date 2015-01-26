@@ -276,6 +276,9 @@
               }
               callback(err, stdout, stderr);
             });
+            process.on('error', function (err) {
+              callback(err, stdout, stderr);
+            });
         }
 
         // Run it
