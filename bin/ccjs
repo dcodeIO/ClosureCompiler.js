@@ -86,7 +86,7 @@ ClosureCompiler.compile(files, options, process.stdin, function(error, result) {
             return $1+"="+$2;
         });
         console.error("ClosureCompiler.js "+pkg.version+" - https://github.com/dcodeIO/ClosureCompiler.js\n");
-        console.error("  Usage:   "+path.basename(process.argv[1])+" [sourceFiles ...|-] [--option=value --flagOption ...] [> outFile]\n");
+        console.error("  Usage:   "+path.basename(process.argv[1])+" sourceFiles...|- [--option=value --flagOption ...] [> outFile]\n");
         console.error(error);
         process.exit(1);
     }
