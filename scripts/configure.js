@@ -155,12 +155,26 @@ function download(downloadUrl, filename, callback, ondata) {
     var url = require("url").parse(downloadUrl);
     var out = require("fs").createWriteStream(filename, { flags: 'w', encoding: null, mode: 0666 });
     var bytes = 0, total = -1;
-    var req = require(path.join(__dirname, "..", "lib", "follow-redirects.js")).http.request({
-        "hostname": url["host"],
-        "method": "GET",
-        "path": url["path"],
-        "agent": false
-    }, function(res) {
+    var options = {
+        "hostname" : url["host"],
+        "method" : "GET",
+        "path" : url["path"],
+        "agent" : false
+    }
+
+    // Reconfigure request options if an HTTP proxy setting exists
+    if (process.env.http_proxy) {
+        var http_proxy = require("url").parse(process.env.http_proxy);
+        options["hostname"] = http_proxy["hostname"];
+        options["port"] = http_proxy["port"];
+        options["path"] = url["href"];
+        options["headers"] = {
+            "Host" : url["host"]
+        };
+    }
+
+    var req = require(path.join(__dirname, "..", "lib", "follow-redirects.js")).http.request(options,
+                                                                                             function(res) {
         if (res.headers["content-length"]) {
             total = parseInt(res.headers["content-length"], 10);
         }
