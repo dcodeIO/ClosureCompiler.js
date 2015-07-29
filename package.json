@@ -22,6 +22,7 @@
         "tar": "0.1.20",
         "closurecompiler-externs": "*",
         "bl": "~0.9.3",
+        "one-time": "0.0.2",
         "jsdoc": "~3.3.0-alpha10"
     },
     "license": "Apache License, Version 2.0",

@@ -29,6 +29,7 @@
     var path = require("path"),
         fs = require("fs"),
         child_process = require("child_process"),
+        once = require('one-time'),
         concat = require('bl');
 
     if (!fs.existsSync) fs.existsSync = path.existsSync; // node < 0.8
@@ -259,6 +260,7 @@
         
         // Executes a command
         function exec(cmd, args, stdin, callback) {
+            var cb = once(callback);
             var stdout = concat();
             var stderr = concat();
 
@@ -267,14 +269,15 @@
             });
             process.stdout.pipe(stdout);
             process.stderr.pipe(stderr);
+            process.on('error', cb);
             process.on('exit', function(code, signal) {
               var err;
-              if (code) {
+              if (code !== 0) {
                 err = new Error(code);
                 err.code = code;
                 err.signal = signal;
               }
-              callback(err, stdout, stderr);
+              cb(err, stdout, stderr);
             });
             process.on('error', function (err) {
               callback(err, stdout, stderr);
