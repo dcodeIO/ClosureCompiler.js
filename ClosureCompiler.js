@@ -21,7 +21,7 @@
  */
 (function(global) {
     
-    if ((typeof window != 'undefined' && !!window.window) || typeof require != 'function') {
+    if (typeof require != 'function' || !module || !module.exports || !process) {
         throw(new Error("ClosureCompiler.js can only be used within node.js"));
     }
 
