@@ -66,7 +66,7 @@ rather large code base. When omitted, `-Xmx` defaults to `1024m`.
 Usage with Grunt and Gulp
 ----------------
 - [grunt-closurecompiler](https://github.com/dcodeIO/grunt-closurecompiler)
-- [gulp-closure-compiler](https://github.com/sindresorhus/gulp-closure-compiler)
+- [gulp-closure-compiler](https://github.com/steida/gulp-closure-compiler)
 
 Externs for `ADVANCED_OPTIMIZATIONS`
 ------------------------------------
