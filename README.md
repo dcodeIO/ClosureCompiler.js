@@ -1,6 +1,10 @@
 ![ClosureCompiler.js - Closure Compiler for node.js](https://raw.github.com/dcodeIO/ClosureCompiler.js/master/ClosureCompiler.png)
 =================================================
 
+> Deprecation notice: This project has been deprecated. Alternatives:
+> * [closure-compiler](https://www.npmjs.com/package/closure-compiler)
+> * [google-closure-compiler](https://www.npmjs.com/package/google-closure-compiler)
+
 The all-round carefree package. Automatically downloads and sets up [Closure Compiler](https://developers.google.com/closure/compiler/)
 and a JRE built from [OpenJDK](http://openjdk.java.net) if required. No environment variables to set, works out of
 the box.
@@ -89,10 +93,6 @@ automatically download and set up the latest version of Closure Compiler to be u
 #### Using custom Closure Compiler builds ####
 If you want to use a custom Closure Compiler build for whatever reason, just replace the files in the `compiler/`
 directory.
-
-Documentation
--------------
-* [View documentation](http://htmlpreview.github.com/?http://github.com/dcodeIO/ClosureCompiler.js/master/docs/ClosureCompiler.html)
 
 Tests [![Build Status](https://travis-ci.org/dcodeIO/ClosureCompiler.js.png?branch=master)](https://travis-ci.org/dcodeIO/ClosureCompiler.js)
 -----

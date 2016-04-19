@@ -1,6 +1,6 @@
 {
     "name": "closurecompiler",
-    "version": "1.5.2",
+    "version": "1.5.3",
     "description": "ClosureCompiler.js: Closure Compiler for node.js. The all-round carefree package.",
     "author": "Daniel Wirtz <dcode@dcode.io>",
     "contributors": [
@@ -19,12 +19,11 @@
     },
     "keywords": ["closure compiler", "closure", "compiler", "util", "utility"],
     "dependencies": {
-        "tar": "0.1.20",
+        "tar": "~2.2.1",
         "closurecompiler-externs": "*",
-        "bl": "~0.9.3",
-        "jsdoc": "~3.3.0-alpha10"
+        "bl": "~0.9.3"
     },
-    "license": "Apache License, Version 2.0",
+    "license": "Apache-2.0",
     "engines": {
         "node": ">=0.8"
     },
@@ -34,9 +33,8 @@
         "test": "node tests/test.js",
         
         "configure": "node scripts/configure.js",
-        "make": "npm run-script compile && npm test && npm run-script jsdoc",
-        "compile": "node bin/ccjs ClosureCompiler.js --externs=node --compilation_level=ADVANCED_OPTIMIZATIONS > ClosureCompiler.min.js",
-        "jsdoc": "node node_modules/jsdoc/jsdoc.js -c jsdoc.json"
+        "make": "npm run-script compile && npm test",
+        "compile": "node bin/ccjs ClosureCompiler.js --externs=node --compilation_level=SIMPLE_OPTIMIZATIONS > ClosureCompiler.min.js"
     },
     "preferGlobal": true
 }

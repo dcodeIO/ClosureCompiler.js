@@ -55,7 +55,6 @@
      * @param {string} actual Actual value
      * @param {Array} expected Expected values
      * @throw {Error} If the option is invalid
-     * @return {string} Validated option
      * @private
      */
     ClosureCompiler._assertOption = function(name, actual, expected) {
@@ -67,14 +66,12 @@
     /**
      * Java extension, e.g. '.exe' on windows.
      * @type {string}
-     * @expose
      */
     ClosureCompiler.JAVA_EXT = process.platform == 'win32' ? '.exe' : '';
 
     /**
      * Gets the path of the global java executable.
      * @return {string} Absolute path to or "java(.exe)" if not determinable
-     * @expose
      */
     ClosureCompiler.getGlobalJava = function() {
         var java = null;
@@ -94,7 +91,6 @@
     /**
      * Gets the path of the bundled java executable.
      * @return {string} Absolute path to "java(.exe)"
-     * @expose
      */
     ClosureCompiler.getBundledJava = function() {
         return path.normalize(path.join(__dirname, "jre", "bin", "java"+ClosureCompiler.JAVA_EXT));
@@ -104,7 +100,6 @@
      * Tests if java is callable.
      * @param {string} java Path to java
      * @param {function(boolean, Error)} callback Callback function
-     * @expose
      */
     ClosureCompiler.testJava = function(java, callback) {
         child_process.exec('"'+java+'" -version', {}, function(error, stdout, stderr) {
@@ -128,7 +123,6 @@
      * @param {ReadStream} stdin Optional read stream to use as stdin for closure compiler
      * @param {function(Error,string)} callback Callback called with the error, if any, and the compiled code
      * @throws {Error} If the file cannot be compiled
-     * @expose
      */
     ClosureCompiler.compile = function(files, options, stdin, callback) {
         if (arguments.length < 4) {
@@ -145,7 +139,6 @@
      * @param {function((Error|string),string)} callback Callback called with the error, if any, and the compiled code.
      *  If no error occurred, error contains the string output from stderr besides the result.
      * @throws {Error} If the file cannot be compiled
-     * @expose
      */
     ClosureCompiler.prototype.compile = function(files, stdin, callback) {
         if (arguments.length < 3) {
@@ -305,7 +298,6 @@
     /**
      * Returns a string representation of this object.
      * @returns {string} String representation as of "ClosureCompiler"
-     * @expose
      */
     ClosureCompiler.prototype.toString = function() {
         return "ClosureCompiler";
