@@ -1,7 +1,7 @@
 ![ClosureCompiler.js - Closure Compiler for node.js](https://raw.github.com/dcodeIO/ClosureCompiler.js/master/ClosureCompiler.png)
 =================================================
 
-> Deprecation notice: This project has been deprecated. Alternatives:
+> **Deprecation notice:** This project is outdated. Alternatives:
 > * [closure-compiler](https://www.npmjs.com/package/closure-compiler)
 > * [google-closure-compiler](https://www.npmjs.com/package/google-closure-compiler)
 
