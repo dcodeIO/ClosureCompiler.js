@@ -20,7 +20,7 @@
  * see: https://github.com/dcodeIO/ClosureCompiler.js for details
  */
 (function(global) {
-    
+
     if (typeof require != 'function' || !module || !module.exports || !process) {
         throw(new Error("ClosureCompiler.js can only be used within node.js"));
     }
@@ -32,7 +32,7 @@
         concat = require('bl');
 
     if (!fs.existsSync) fs.existsSync = path.existsSync; // node < 0.8
-    
+
     /**
      * Constructs a new ClosureCompiler instance.
      * @exports ClosureCompiler
@@ -75,19 +75,19 @@
      */
     ClosureCompiler.getGlobalJava = function() {
         var java = null;
-        
+
         if (process.env["JAVA_HOME"]) {
             java = path.join(process.env["JAVA_HOME"], "bin", "java"+ClosureCompiler.JAVA_EXT);
             if (!fs.existsSync(java)) {
                 java = null;
             }
-        } 
+        }
         if (!java) {
             java = "java";
         }
         return java;
     };
-    
+
     /**
      * Gets the path of the bundled java executable.
      * @return {string} Absolute path to "java(.exe)"
@@ -155,11 +155,11 @@
         delete options["js"];
         delete options["js_output_file"];
 
-        var xms = options["Xms"] || null,
-            xmx = options["Xmx"] || "1024m";
-        delete options["Xms"];
-        delete options["Xmx"];
-        
+        var xms = options["xms"] || null;
+        var xmx = options["xmx"] || "1024m";
+        delete options["xms"];
+        delete options["xmx"];
+
         // -XX:+TieredCompilation speeds up compilation for Java 1.7.
         // Previous -d32 was for Java 1.6 only.
         // Compiler now requires Java 1.7 and this flag does not need detection.
@@ -188,7 +188,7 @@
                 args.push('--js', files[i]);
             }
         }
-        
+
         // Externs files
         if (!options.externs) options.externs = [];
         if (!(options.externs instanceof Array)) {
@@ -224,7 +224,7 @@
         for (i=0; i<externs.length; i++) {
             args.push('--externs', externs[i]);
         }
-        
+
         // Convert any other options to command line arguments
         keys = Object.keys(options);
         for (i=0; i<keys.length; i++) {
@@ -249,7 +249,7 @@
                 }
             }
         }
-        
+
         // Executes a command
         function exec(cmd, args, stdin, callback) {
             var stdout = concat();
@@ -284,7 +284,7 @@
                 }
             });
         }
-        
+
         // Try any other global java
         ClosureCompiler.testJava(ClosureCompiler.getGlobalJava(), function(ok) {
             if (ok) {
@@ -309,7 +309,7 @@
     ClosureCompiler.prototype.toString = function() {
         return "ClosureCompiler";
     };
-    
+
     module["exports"] = ClosureCompiler;
-    
+
 })(this);
