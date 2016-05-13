@@ -4,6 +4,7 @@
 > **Deprecation notice:** This project is outdated. Alternatives:
 > * [closure-compiler](https://www.npmjs.com/package/closure-compiler)
 > * [google-closure-compiler](https://www.npmjs.com/package/google-closure-compiler)
+> * [closure-builder](https://www.npmjs.com/package/closure-builder)
 
 The all-round carefree package. Automatically downloads and sets up [Closure Compiler](https://developers.google.com/closure/compiler/)
 and a JRE built from [OpenJDK](http://openjdk.java.net) if required. No environment variables to set, works out of
