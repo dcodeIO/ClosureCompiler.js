@@ -95,7 +95,7 @@ automatically download and set up the latest version of Closure Compiler to be u
 
 #### Using custom Closure Compiler builds ####
 If you want to use a custom Closure Compiler build for whatever reason, just replace the files in the `compiler/`
-directory or pass compiler_jar [option](#available-options).
+directory or pass `compiler_jar` [option](#available-options).
 
 Tests [![Build Status](https://travis-ci.org/dcodeIO/ClosureCompiler.js.png?branch=master)](https://travis-ci.org/dcodeIO/ClosureCompiler.js)
 -----
