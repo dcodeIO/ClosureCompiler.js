@@ -64,8 +64,11 @@ The API and `ccjs` support all the command line options of Closure Compiler exce
 
 * [See the output of ccjs --help](https://github.com/dcodeIO/ClosureCompiler.js/blob/master/OPTIONS.md).
 
-Additionally, the JVM parameters `-Xms` and `-Xmx` are supported just in case that you run out of heap space compiling a
+Additional options:
+
+* JVM parameters `-Xms` and `-Xmx` are supported just in case that you run out of heap space compiling a
 rather large code base. When omitted, `-Xmx` defaults to `1024m`.
+* `compiler_jar` absolute path to the Closure Compiler jar file. If not specified the latest installed version will be used.
 
 Usage with Grunt and Gulp
 ----------------
@@ -92,7 +95,7 @@ automatically download and set up the latest version of Closure Compiler to be u
 
 #### Using custom Closure Compiler builds ####
 If you want to use a custom Closure Compiler build for whatever reason, just replace the files in the `compiler/`
-directory.
+directory or pass `compiler_jar` [option](#available-options).
 
 Tests [![Build Status](https://travis-ci.org/dcodeIO/ClosureCompiler.js.png?branch=master)](https://travis-ci.org/dcodeIO/ClosureCompiler.js)
 -----

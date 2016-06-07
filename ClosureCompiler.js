@@ -164,11 +164,20 @@
         // Previous -d32 was for Java 1.6 only.
         // Compiler now requires Java 1.7 and this flag does not need detection.
         var args = ['-XX:+TieredCompilation'];
-            if (xms) args.push('-Xms'+xms);
-            args.push(
-                '-Xmx'+xmx,
-                '-jar', __dirname+'/compiler/compiler.jar'
-            );
+        if (xms) {
+            args.push('-Xms'+xms);
+        }
+
+        var jarPath = __dirname + '/compiler/compiler.jar';
+        if (options['compiler_jar']) {
+            jarPath = options['compiler_jar'];
+            delete options['compiler_jar'];
+        }
+
+        args.push(
+            '-Xmx' + xmx,
+            '-jar', jarPath
+        );
 
         // Source files
         if (!(files instanceof Array)) {
