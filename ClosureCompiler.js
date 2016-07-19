@@ -163,7 +163,7 @@
         var jarDir = __dirname + '/compiler',
           jarFilePath = jarDir + '/compiler.jar';
 
-        fs.readdirSync(__dirname + '/compiler').forEach(function(file) {
+        fs.readdirSync(jarDir).forEach(function(file) {
             if (file.indexOf('closure-compiler') !== -1) {
                 jarFilePath = jarDir + "/" + file;
             }
