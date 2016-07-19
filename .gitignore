@@ -2,6 +2,7 @@ node_modules
 npm-debug.log
 compiler/compiler.tar.gz
 compiler/compiler.jar
+compiler/closure-compiler-*
 jre/jre.tar.gz
 jre/bin
 jre/lib
