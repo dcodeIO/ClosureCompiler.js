@@ -155,19 +155,22 @@
         delete options["js"];
         delete options["js_output_file"];
 
-        var xms = options["Xms"] || null,
-            xmx = options["Xmx"] || "1024m";
-        delete options["Xms"];
-        delete options["Xmx"];
+        var xms = options["xms"] || null,
+            xmx = options["xmx"] || "1024m";
+        delete options["xms"];
+        delete options["xmx"];
 
-        var jarDir = __dirname + '/compiler',
-          jarFilePath = jarDir + '/compiler.jar';
-
-        fs.readdirSync(jarDir).forEach(function(file) {
-            if (file.indexOf('closure-compiler') !== -1) {
-                jarFilePath = jarDir + "/" + file;
-            }
-        });
+        var jarFilePath;
+        if (options['compiler_jar'])
+            jarFilePath = options['compiler_jar'];
+        else {
+            var jarDir = __dirname + '/compiler';
+            fs.readdirSync(jarDir).forEach(function(file) {
+                if (file.indexOf('closure-compiler') !== -1) {
+                    jarFilePath = jarDir + "/" + file;
+                }
+            });
+        }
 
         // -XX:+TieredCompilation speeds up compilation for Java 1.7.
         // Previous -d32 was for Java 1.6 only.

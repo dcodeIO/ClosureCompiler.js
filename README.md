@@ -4,6 +4,7 @@
 > **Deprecation notice:** This project is outdated. Alternatives:
 > * [closure-compiler](https://www.npmjs.com/package/closure-compiler)
 > * [google-closure-compiler](https://www.npmjs.com/package/google-closure-compiler)
+> * [closure-builder](https://www.npmjs.com/package/closure-builder)
 
 The all-round carefree package. Automatically downloads and sets up [Closure Compiler](https://developers.google.com/closure/compiler/)
 and a JRE built from [OpenJDK](http://openjdk.java.net) if required. No environment variables to set, works out of
@@ -64,13 +65,15 @@ The API and `ccjs` support all the command line options of Closure Compiler exce
 
 * [See the output of ccjs --help](https://github.com/dcodeIO/ClosureCompiler.js/blob/master/OPTIONS.md).
 
-Additionally, the JVM parameters `-Xms` and `-Xmx` are supported just in case that you run out of heap space compiling a
-rather large code base. When omitted, `-Xmx` defaults to `1024m`.
+Additional options:
+
+* JVM parameters `-xms` and `-xmx` are supported (lower case) just in case that you run out of heap space compiling a rather large code base. When omitted, `-xmx` defaults to 1024m.
+* `-compiler_jar` specifies the absolute path to the Closure Compiler jar file. If not specified the latest installed version will be used.
 
 Usage with Grunt and Gulp
 ----------------
 - [grunt-closurecompiler](https://github.com/dcodeIO/grunt-closurecompiler)
-- [gulp-closure-compiler](https://github.com/sindresorhus/gulp-closure-compiler)
+- [gulp-closure-compiler](https://github.com/steida/gulp-closure-compiler)
 
 Externs for `ADVANCED_OPTIMIZATIONS`
 ------------------------------------
