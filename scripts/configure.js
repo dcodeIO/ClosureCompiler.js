@@ -48,7 +48,7 @@ function platformPostfix() {
 }
 
 // Bundled JRE download url
-var jrePrefix = "http://bundled-openjdk-jre.googlecode.com/files/OpenJDK-JRE-7u6_24-";
+var jrePrefix = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/bundled-openjdk-jre/OpenJDK-JRE-7u6_24-";
 var jrePostfix = ".tar.gz";
 var jreUrl = jrePrefix+platformPostfix()+jrePostfix;
 
@@ -205,13 +205,13 @@ function download(downloadUrl, filename, callback, ondata) {
  * @param {function(?Error)} callback
  * @param {function(Object)=} entryCallback
  */
-function unpack(filename, callback, entryCallback) {   
+function unpack(filename, callback, entryCallback) {
     var input = fs.createReadStream(filename, { flags: 'r', encoding: null }),
         files = {},
         dir = path.dirname(filename),
         returned = false,
         to = null;
-    
+
     // Finishs the unpack if all files are done
     function maybeFinish() {
         if (to !== null) clearTimeout(to);
@@ -230,7 +230,7 @@ function unpack(filename, callback, entryCallback) {
             }
         }, 1000);
     }
-    
+
     input.pipe(zlib.createGunzip()).pipe(tar.Parse()).on("entry", function(entry) {
         if (entryCallback) entryCallback(entry);
         if (entry["type"] == 'File') {
