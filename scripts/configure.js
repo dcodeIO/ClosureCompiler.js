@@ -31,7 +31,7 @@ var ClosureCompiler = require(__dirname+"/../ClosureCompiler.js"),
 console.log("Configuring ClosureCompiler.js "+pkg.version+" ...\n");
 
 // Closure Compiler download url
-var ccUrl = "http://dl.google.com/closure-compiler/compiler-latest.tar.gz";
+var ccUrl = "https://dl.google.com/closure-compiler/compiler-latest.tar.gz";
 
 // Temporary file for the download
 var ccTempFile = path.normalize(path.join(__dirname, "..", "compiler", "compiler.tar.gz"));
@@ -48,7 +48,7 @@ function platformPostfix() {
 }
 
 // Bundled JRE download url
-var jrePrefix = "http://bundled-openjdk-jre.googlecode.com/files/OpenJDK-JRE-7u6_24-";
+var jrePrefix = "https://bundled-openjdk-jre.googlecode.com/files/OpenJDK-JRE-7u6_24-";
 var jrePostfix = ".tar.gz";
 var jreUrl = jrePrefix+platformPostfix()+jrePostfix;
 
