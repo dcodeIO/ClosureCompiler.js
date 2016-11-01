@@ -161,10 +161,10 @@
         delete options["xmx"];
 
         var jarFilePath;
-        if (options['compiler_jar'])
+        if (options['compiler_jar']) {
             jarFilePath = options['compiler_jar'];
             delete options['compiler_jar'];
-        else {
+        } else {
             var jarDir = __dirname + '/compiler';
             fs.readdirSync(jarDir).forEach(function(file) {
                 if (file.indexOf('closure-compiler') !== -1) {
