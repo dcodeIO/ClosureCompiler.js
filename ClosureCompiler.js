@@ -163,6 +163,7 @@
         var jarFilePath;
         if (options['compiler_jar'])
             jarFilePath = options['compiler_jar'];
+            delete options['compiler_jar'];
         else {
             var jarDir = __dirname + '/compiler';
             fs.readdirSync(jarDir).forEach(function(file) {
