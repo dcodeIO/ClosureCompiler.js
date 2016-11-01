@@ -31,7 +31,7 @@ var ClosureCompiler = require(__dirname+"/../ClosureCompiler.js"),
 console.log("Configuring ClosureCompiler.js "+pkg.version+" ...\n");
 
 // Closure Compiler download url
-var ccUrl = "http://dl.google.com/closure-compiler/compiler-latest.tar.gz";
+var ccUrl = "https://dl.google.com/closure-compiler/compiler-latest.tar.gz";
 
 // Temporary file for the download
 var ccTempFile = path.normalize(path.join(__dirname, "..", "compiler", "compiler.tar.gz"));
