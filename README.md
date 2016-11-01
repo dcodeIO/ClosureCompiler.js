@@ -2,8 +2,9 @@
 =================================================
 
 > **Deprecation notice:** This project is outdated. Alternatives:
+> * [google-closure-compiler-js](https://www.npmjs.com/package/google-closure-compiler-js) No Java needed!
+> * [google-closure-compiler](https://www.npmjs.com/package/google-closure-compiler) Offical wrapper
 > * [closure-compiler](https://www.npmjs.com/package/closure-compiler)
-> * [google-closure-compiler](https://www.npmjs.com/package/google-closure-compiler)
 > * [closure-builder](https://www.npmjs.com/package/closure-builder)
 
 The all-round carefree package. Automatically downloads and sets up [Closure Compiler](https://developers.google.com/closure/compiler/)
